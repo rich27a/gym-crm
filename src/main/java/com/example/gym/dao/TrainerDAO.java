@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TrainerDAO implements GenericDAO<Trainer>{
 
-    @Autowired
     private Map<Integer, Trainer> trainerMap;
     private static final Logger logger = LoggerFactory.getLogger(TrainerDAO.class);
     @Override
@@ -47,9 +46,10 @@ public class TrainerDAO implements GenericDAO<Trainer>{
         logger.info("delete operation is not supported");
     }
 
-    @Override
+
     @Autowired
-    public void setStorage(Storage storage) {
-        logger.info("setting storage...");
+    public void setStorage(Map<Integer, Trainer> trainerMap) {
+        this.trainerMap = trainerMap;
+        logger.info("setting storage trainers...");
     }
 }

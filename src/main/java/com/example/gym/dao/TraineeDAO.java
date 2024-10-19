@@ -1,6 +1,5 @@
 package com.example.gym.dao;
 
-import com.example.gym.models.Storage;
 import com.example.gym.models.Trainee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import java.util.*;
 
 @Repository
 public class TraineeDAO implements GenericDAO<Trainee> {
-    @Autowired
     private Map<Integer, Trainee> traineeMap;
     private static final Logger logger = LoggerFactory.getLogger(TraineeDAO.class);
     @Override
@@ -52,10 +50,10 @@ public class TraineeDAO implements GenericDAO<Trainee> {
         }
     }
 
-    @Override
+
     @Autowired
-    public void setStorage(Storage storage) {
-        logger.info("setting storage...");
-//        this.storage = storage;
+    public void setStorage(Map<Integer, Trainee> traineeMap) {
+        logger.info("setting storage trainees...");
+        this.traineeMap = traineeMap;
     }
 }

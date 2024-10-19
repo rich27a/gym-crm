@@ -14,7 +14,6 @@ import java.util.Optional;
 @Repository
 public class TrainingDAO implements GenericDAO<Training> {
     private static final Logger logger = LoggerFactory.getLogger(TrainingDAO.class);
-    @Autowired
     private Map<Integer, Training> trainingMap;
     @Override
     public void save(Training training) {
@@ -44,9 +43,9 @@ public class TrainingDAO implements GenericDAO<Training> {
         logger.warn("operation not supported");
     }
 
-    @Override
     @Autowired
-    public void setStorage(Storage storage) {
-        logger.info("setting storage...");
+    public void setStorage(Map<Integer, Training> trainingMap) {
+        logger.info("setting storage training...");
+        this.trainingMap = trainingMap;
     }
 }
