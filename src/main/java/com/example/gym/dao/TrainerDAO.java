@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 
 public class TrainerDAO implements GenericDAO<Trainer>{
@@ -20,9 +22,9 @@ public class TrainerDAO implements GenericDAO<Trainer>{
     }
 
     @Override
-    public Trainer findById(int id) {
+    public Optional<Trainer> findById(int id) {
         logger.info("trainer with id: " + id + " has been found");
-        return storage.getTrainerMap().get(id);
+        return Optional.ofNullable(storage.getTrainerMap().get(id));
     }
 
     @Override
@@ -41,13 +43,13 @@ public class TrainerDAO implements GenericDAO<Trainer>{
 
     @Override
     public void delete(int id) {
-        storage.getTrainerMap().remove(id);
-        logger.info("deleting trainer with id: " + id);
+        logger.info("delete operation is not supported");
     }
 
     @Override
     @Autowired
     public void setStorage(Storage storage) {
+        logger.info("setting storage...");
         this.storage = storage;
     }
 }
