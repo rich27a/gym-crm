@@ -1,6 +1,7 @@
 package com.example.gym.models;
 
 public class Training{
+    private int trainingId;
     private int traineeId;
     private int trainerId;
     private String trainingName;
@@ -9,6 +10,13 @@ public class Training{
     private int trainingDuration;
 
 
+    public int getTrainingId() {
+        return trainingId;
+    }
+
+    public void setTrainingId(int trainingId) {
+        this.trainingId = trainingId;
+    }
 
     public int getTraineeId() {
         return traineeId;

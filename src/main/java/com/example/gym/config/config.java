@@ -49,9 +49,8 @@ public class config {
                     }else if(data[0].equalsIgnoreCase("Training")){
                         Training training = new Training();
                         LineToModelParser.parseLineToTraining(training, data);
-                        int idTraining = training.getTraineeId() + training.getTrainerId() + training.getTrainingDuration();
-                        storage.getTrainingMap().put(idTraining, training);
-                        logger.info("training: " + idTraining + " successfully saved");
+                        storage.getTrainingMap().put(training.getTrainingId(), training);
+                        logger.info("training: " + training.getTrainingId() + " successfully saved");
                     }
 
                 });
