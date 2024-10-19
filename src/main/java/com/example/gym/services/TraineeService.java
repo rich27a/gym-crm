@@ -27,7 +27,7 @@ public class TraineeService {
         Trainee trainee = new Trainee(id, firstName, lastName, username, password,
                 true, dateOfBirth, address);
         traineeDAO.save(trainee);
-        logger.info("user with id: " + id + "successfully created...");
+        logger.info("trainee with id: " + id + "successfully created...");
         return trainee;
     }
 

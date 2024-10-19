@@ -12,6 +12,7 @@ public class Trainer extends User{
         this.specialization = specialization;
     }
 
+
     public Specialization getSpecialization() {
         return specialization;
     }

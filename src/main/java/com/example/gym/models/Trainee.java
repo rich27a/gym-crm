@@ -6,8 +6,7 @@ public class Trainee extends User{
     private String dateOfBirth;
     private String address;
 
-    public Trainee(int id, String firstName, String lastName, String username, String password, boolean isActive) {
-        super(id, firstName, lastName, username, password, isActive);
+    public Trainee() {
     }
 
     public Trainee(int id, String firstName, String lastName, String username, String password, boolean isActive, String dateOfBirth, String address) {
