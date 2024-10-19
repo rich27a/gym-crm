@@ -3,14 +3,14 @@ package com.example.gym.models;
 import java.util.Date;
 
 public class Trainee extends User{
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String address;
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

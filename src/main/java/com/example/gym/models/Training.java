@@ -1,35 +1,28 @@
 package com.example.gym.models;
 
 public class Training{
-    private long id;
-    private long traineeId;
-    private long trainerId;
+    private int traineeId;
+    private int trainerId;
     private String trainingName;
     private String trainingType;
     private String trainingDate;
     private int trainingDuration;
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
-    public long getTraineeId() {
+    public int getTraineeId() {
         return traineeId;
     }
 
-    public void setTraineeId(long traineeId) {
+    public void setTraineeId(int traineeId) {
         this.traineeId = traineeId;
     }
 
-    public long getTrainerId() {
+    public int getTrainerId() {
         return trainerId;
     }
 
-    public void setTrainerId(long trainerId) {
+    public void setTrainerId(int trainerId) {
         this.trainerId = trainerId;
     }
 
@@ -68,7 +61,6 @@ public class Training{
     @Override
     public String toString() {
         return "Training{" +
-                "id=" + id +
                 ", traineeId=" + traineeId +
                 ", trainerId=" + trainerId +
                 ", trainingName='" + trainingName + '\'' +

@@ -1,18 +1,18 @@
 package com.example.gym.models;
 
 public abstract class User {
-    private long id;
+    private int id;
     private String firstName;
     private String lastName;
     private String username;
     private String password;
     private boolean isActive;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

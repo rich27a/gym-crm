@@ -15,7 +15,6 @@ public class Storage {
     public Map<Integer, Trainee> getTraineeMap() {
         return traineeMap;
     }
-
     public Map<Integer, Training> getTrainingMap() {
         return trainingMap;
     }
