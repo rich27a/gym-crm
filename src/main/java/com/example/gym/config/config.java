@@ -36,16 +36,16 @@ public class config {
                     if(data[0].equalsIgnoreCase("Trainer")){
                         Trainer trainer = new Trainer();
                         LineToModelParser.parseLineToUser(trainer, data);
-                        trainer.setSpecialization(Specialization.valueOf(data[6]));
+                        trainer.setSpecialization(Specialization.valueOf(data[7]));
                         storage.getTrainerMap().put(trainer.getId(), trainer);
-                        logger.info("user: " + trainer.getId() + " successfully saved...");
+                        logger.info("trainer: " + trainer.getId() + " successfully saved...");
                     }else if (data[0].equalsIgnoreCase("Trainee")){
                         Trainee trainee = new Trainee();
                         LineToModelParser.parseLineToUser(trainee, data);
                         trainee.setDateOfBirth(data[7]);
                         trainee.setAddress(data[8]);
                         storage.getTraineeMap().put(trainee.getId(), trainee);
-                        logger.info("user: " + trainee.getId() + " successfully saved...");
+                        logger.info("trainee: " + trainee.getId() + " successfully saved...");
                     }else if(data[0].equalsIgnoreCase("Training")){
                         Training training = new Training();
                         LineToModelParser.parseLineToTraining(training, data);

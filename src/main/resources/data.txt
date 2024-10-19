@@ -1,6 +1,9 @@
-1
-2
-3
-4
-5
-6
+trainer,1,ricardo,ramos,rich,123,true,CARDIO
+trainer,2,joel,franco,joel27,123,true,CARDIO
+trainer,3,jose,perez,perez16,123,false,YOGA
+trainee,1,juan,flores,flor22,1234,true,25-01-1991,calle soledad #44
+trainee,2,marco,cortez,mc66,1234,true,01-01-2000,av revolucion #22
+trainee,3,saul,hernandez,saul33,1234,true,21-05-1995,calle bicentenario #111
+training,1,1,HIIT,cardio,20-10-2024,60
+training,2,3,HIIT,yoga,25-10-2024,120
+
