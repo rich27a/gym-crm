@@ -23,11 +23,11 @@ public class TraineeService {
         String password = Profile.generatePassword();
         UUID uuid = UUID.randomUUID();
         int id = uuid.hashCode();
-        logger.info("generating id: " + id);
+        logger.debug("generating id: {}" , id);
         Trainee trainee = new Trainee(id, firstName, lastName, username, password,
                 true, dateOfBirth, address);
         traineeDAO.save(trainee);
-        logger.info("trainee with id: " + id + "successfully created...");
+        logger.debug("trainee with id: {}" , id + "successfully created...");
         return trainee;
     }
 
@@ -41,7 +41,7 @@ public class TraineeService {
             trainee.setAddress(address);
             trainee.setDateOfBirth(dateOfBirth);
             traineeDAO.save(trainee);
-            logger.info("trainee with id: " + id + " successfully updated");
+            logger.debug("trainee with id: {}" , id + " successfully updated");
         }else {
             logger.warn("trainee with id: " + id + " not found");
         }

@@ -21,10 +21,10 @@ public class TrainerService {
         String password = Profile.generatePassword();
         UUID uuid = UUID.randomUUID();
         int id = uuid.hashCode();
-        logger.info("generating id: " + id);
+        logger.debug("generating id: {}", id);
         Trainer trainer = new Trainer(id, firstName, lastName, username, password, true, specialization);
         trainerDAO.save(trainer);
-        logger.info("trainer with id: " + id + "successfully created...");
+        logger.debug("trainer with id: {} ", id + " successfully created...");
         return trainer;
     }
 
@@ -36,10 +36,10 @@ public class TrainerService {
             trainer.setLastName(lastName);
             trainer.setSpecialization(specialization);
             trainerDAO.save(trainer);
-            logger.info("trainee with id: " + id + " successfully updated");
+            logger.debug("trainee with id: {}" , id + " successfully updated");
 
         }else {
-            logger.info("trainee with id: " + id + " not found");
+            logger.info("trainee with id: {}" , id + " not found");
         }
         return trainerOpt;
     }
