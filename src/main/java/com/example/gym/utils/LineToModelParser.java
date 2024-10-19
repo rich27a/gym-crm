@@ -8,9 +8,10 @@ public class LineToModelParser {
         user.setId(Integer.parseInt(data[1]));
         user.setFirstName(data[2]);
         user.setLastName(data[3]);
-        user.setUsername(data[4]);
-        user.setPassword(data[5]);
+        user.setUsername(Profile.generateUsername(user.getFirstName(), user.getLastName()));
+        user.setPassword(Profile.generatePassword());
         user.setActive(Boolean.parseBoolean(data[6]));
+
     }
     public static void parseLineToTraining(Training training, String[] data){
         training.setTrainingId(Integer.parseInt(data[1]));

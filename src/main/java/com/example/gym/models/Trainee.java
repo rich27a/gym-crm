@@ -1,6 +1,5 @@
 package com.example.gym.models;
 
-import java.util.Date;
 
 public class Trainee extends User{
     private String dateOfBirth;
