@@ -16,7 +16,6 @@ import java.util.Optional;
 public class TraineeDAO implements GenericDAO<Trainee> {
     private Storage storage;
     private static final Logger logger = LoggerFactory.getLogger(TraineeDAO.class);
-
     @Override
     public void save(Trainee trainee) {
         storage.getTraineeMap().put(trainee.getId(), trainee);

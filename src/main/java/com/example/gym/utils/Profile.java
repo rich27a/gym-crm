@@ -21,7 +21,7 @@ public class Profile {
         }
     }
 
-    public static String generateRandomPassword() {
+    public static String generatePassword() {
         StringBuilder password = new StringBuilder(10);
         for (int i = 0; i < 10; i++) {
             password.append(CHARS.charAt(random.nextInt(CHARS.length())));

@@ -3,6 +3,15 @@ package com.example.gym.models;
 public class Trainer extends User{
     private Specialization specialization;
 
+    public Trainer(){
+
+    }
+
+    public Trainer(int id, String firstName, String lastName, String username, String password, boolean isActive, Specialization specialization) {
+        super(id, firstName, lastName, username, password, isActive);
+        this.specialization = specialization;
+    }
+
     public Specialization getSpecialization() {
         return specialization;
     }
