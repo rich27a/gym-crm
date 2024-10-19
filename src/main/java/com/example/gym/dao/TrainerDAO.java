@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class TrainerDAO implements GenericDAO<Trainer>{
     private Storage storage;
     private static final Logger logger = LoggerFactory.getLogger(TrainerDAO.class);
