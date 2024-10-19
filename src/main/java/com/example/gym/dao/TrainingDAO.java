@@ -8,21 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 public class TrainingDAO implements GenericDAO<Training> {
     private static final Logger logger = LoggerFactory.getLogger(TrainingDAO.class);
-    private Storage storage;
+    @Autowired
+    private Map<Integer, Training> trainingMap;
     @Override
     public void save(Training training) {
-        storage.getTrainingMap().put(training.getTrainingId(), training);
+        trainingMap.put(training.getTrainingId(), training);
         logger.info("training: " + training.getTrainingId() + "successfully saved");
     }
 
     @Override
     public Optional<Training> findById(int id) {
-        Training training = storage.getTrainingMap().get(id);
+        Training training = trainingMap.get(id);
         if(training == null){
             logger.warn("training with id: " + id + " not found");
         }else {
@@ -46,6 +48,5 @@ public class TrainingDAO implements GenericDAO<Training> {
     @Autowired
     public void setStorage(Storage storage) {
         logger.info("setting storage...");
-        this.storage = storage;
     }
 }

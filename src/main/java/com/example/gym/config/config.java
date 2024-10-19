@@ -13,6 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -27,7 +29,24 @@ public class config {
     }
 
     @Bean
-    public InitializingBean initializingBean(Storage storage){
+    public Map<Integer, Trainer> trainerMap() {
+        return new HashMap<>();
+    }
+
+    @Bean
+    public Map<Integer, Trainee> traineeMap() {
+        return new HashMap<>();
+    }
+
+    @Bean
+    public Map<Integer, Training> trainingMap() {
+        return new HashMap<>();
+    }
+
+
+
+    @Bean
+    public InitializingBean initializingBeans(Map<Integer, Trainer> trainerMap, Map<Integer, Trainee> traineeMap, Map<Integer, Training> trainingMap){
         return () -> {
             try {
                 logger.info("Trying to read file: " + dataPath);
@@ -37,19 +56,19 @@ public class config {
                         Trainer trainer = new Trainer();
                         LineToModelParser.parseLineToUser(trainer, data);
                         trainer.setSpecialization(Specialization.valueOf(data[7]));
-                        storage.getTrainerMap().put(trainer.getId(), trainer);
+                        trainerMap.put(trainer.getId(), trainer);
                         logger.info("trainer: " + trainer.getId() + " successfully saved...");
                     }else if (data[0].equalsIgnoreCase("Trainee")){
                         Trainee trainee = new Trainee();
                         LineToModelParser.parseLineToUser(trainee, data);
                         trainee.setDateOfBirth(data[7]);
                         trainee.setAddress(data[8]);
-                        storage.getTraineeMap().put(trainee.getId(), trainee);
+                        traineeMap.put(trainee.getId(), trainee);
                         logger.info("trainee: " + trainee.getId() + " successfully saved...");
                     }else if(data[0].equalsIgnoreCase("Training")){
                         Training training = new Training();
                         LineToModelParser.parseLineToTraining(training, data);
-                        storage.getTrainingMap().put(training.getTrainingId(), training);
+                        trainingMap.put(training.getTrainingId(), training);
                         logger.info("training: " + training.getTrainingId() + " successfully saved");
                     }
 
@@ -59,7 +78,46 @@ public class config {
                 logger.error("Error while reading the file " + dataPath);
                 exception.printStackTrace();
             }
+            logger.info("trainee map " + traineeMap);
         };
+
     }
+
+
+//    @Bean
+//    public InitializingBean initializingBean2(Storage storage){
+//        return () -> {
+//            try {
+//                logger.info("Trying to read file: " + dataPath);
+//                Files.lines(Paths.get(dataPath)).forEach(line -> {
+//                    String[] data = line.split(",");
+//                    if(data[0].equalsIgnoreCase("Trainer")){
+//                        Trainer trainer = new Trainer();
+//                        LineToModelParser.parseLineToUser(trainer, data);
+//                        trainer.setSpecialization(Specialization.valueOf(data[7]));
+//                        storage.getTrainerMap().put(trainer.getId(), trainer);
+//                        logger.info("trainer: " + trainer.getId() + " successfully saved...");
+//                    }else if (data[0].equalsIgnoreCase("Trainee")){
+//                        Trainee trainee = new Trainee();
+//                        LineToModelParser.parseLineToUser(trainee, data);
+//                        trainee.setDateOfBirth(data[7]);
+//                        trainee.setAddress(data[8]);
+//                        storage.getTraineeMap().put(trainee.getId(), trainee);
+//                        logger.info("trainee: " + trainee.getId() + " successfully saved...");
+//                    }else if(data[0].equalsIgnoreCase("Training")){
+//                        Training training = new Training();
+//                        LineToModelParser.parseLineToTraining(training, data);
+//                        storage.getTrainingMap().put(training.getTrainingId(), training);
+//                        logger.info("training: " + training.getTrainingId() + " successfully saved");
+//                    }
+//
+//                });
+//
+//            }catch (IOException exception){
+//                logger.error("Error while reading the file " + dataPath);
+//                exception.printStackTrace();
+//            }
+//        };
+//    }
 
 }

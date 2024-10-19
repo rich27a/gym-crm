@@ -7,24 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class TraineeDAO implements GenericDAO<Trainee> {
-    private Storage storage;
+    @Autowired
+    private Map<Integer, Trainee> traineeMap;
     private static final Logger logger = LoggerFactory.getLogger(TraineeDAO.class);
     @Override
     public void save(Trainee trainee) {
-        storage.getTraineeMap().put(trainee.getId(), trainee);
+        traineeMap.put(trainee.getId(), trainee);
         logger.info("trainee: " + trainee.getId() + " successfully saved");
     }
 
     @Override
     public Optional<Trainee> findById(int id) {
-        Trainee trainee = storage.getTraineeMap().get(id);
+        Trainee trainee = traineeMap.get(id);
         if(trainee==null)
             logger.warn("trainee: " + id + " not found");
         return Optional.ofNullable(trainee);
@@ -32,24 +30,24 @@ public class TraineeDAO implements GenericDAO<Trainee> {
 
     @Override
     public List<Trainee> findAll() {
-        List<Trainee> traineeList = new ArrayList<>(storage.getTraineeMap().values());
+        List<Trainee> traineeList = new ArrayList<>(traineeMap.values());
         traineeList.sort(new Comparator<Trainee>() {
             @Override
             public int compare(Trainee o1, Trainee o2) {
                 return o1.getLastName().compareTo(o2.getLastName());
             }
         });
-        logger.info(storage.getTraineeMap().size() + " : trainees has been found");
+        logger.info(traineeMap.size() + " : trainees has been found");
         return traineeList;
     }
 
     @Override
     public void delete(int id) {
-        Trainee trainee = storage.getTraineeMap().get(id);
+        Trainee trainee = traineeMap.get(id);
         if(trainee == null){
             logger.warn("trainee: " + id + " not found");
         }else {
-            storage.getTraineeMap().remove(id);
+            traineeMap.remove(id);
             logger.info("trainee: " + id + " deleted");
         }
     }
@@ -58,6 +56,6 @@ public class TraineeDAO implements GenericDAO<Trainee> {
     @Autowired
     public void setStorage(Storage storage) {
         logger.info("setting storage...");
-        this.storage = storage;
+//        this.storage = storage;
     }
 }
