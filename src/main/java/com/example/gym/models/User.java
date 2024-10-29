@@ -1,6 +1,9 @@
 package com.example.gym.models;
 
-public abstract class User {
+import jakarta.persistence.Entity;
+
+@Entity
+public class User {
     private int id;
     private String firstName;
     private String lastName;
