@@ -1,14 +1,21 @@
 package com.example.gym.models;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @Column
     private String firstName;
+    @Column
     private String lastName;
+    @Column
     private String username;
+    @Column
     private String password;
+    @Column
     private boolean isActive;
 
     public User() {
