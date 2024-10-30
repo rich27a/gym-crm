@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 public class Trainer{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "trainer_id")
     private Long id;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     private TrainingType trainingType;

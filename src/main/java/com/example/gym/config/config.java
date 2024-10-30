@@ -49,22 +49,22 @@ public class config {
                     String[] data = line.split(",");
                     if(data[0].equalsIgnoreCase("Trainer")){
                         Trainer trainer = new Trainer();
-                        LineToModelParser.parseLineToUser(trainer, data);
-                        trainer.setSpecialization(Specialization.valueOf(data[7]));
-                        trainerMap.put(trainer.getId(), trainer);
+//                        LineToModelParser.parseLineToUser(trainer, data);
+//                        trainer.setSpecialization(Specialization.valueOf(data[7]));
+//                        trainerMap.put(trainer.getId(), trainer);
                         logger.debug("trainer: " + trainer.getId() + " successfully saved...");
                     }else if (data[0].equalsIgnoreCase("Trainee")){
                         Trainee trainee = new Trainee();
-                        LineToModelParser.parseLineToUser(trainee, data);
-                        trainee.setDateOfBirth(data[7]);
-                        trainee.setAddress(data[8]);
-                        traineeMap.put(trainee.getId(), trainee);
+//                        LineToModelParser.parseLineToUser(trainee, data);
+//                        trainee.setDateOfBirth(data[7]);
+//                        trainee.setAddress(data[8]);
+//                        traineeMap.put(trainee.getId(), trainee);
                         logger.debug("trainee: " + trainee.getId() + " successfully saved...");
                     }else if(data[0].equalsIgnoreCase("Training")){
                         Training training = new Training();
                         LineToModelParser.parseLineToTraining(training, data);
-                        trainingMap.put(training.getTrainingId(), training);
-                        logger.debug("training: " + training.getTrainingId() + " successfully saved");
+//                        trainingMap.put(training.getTrainingId(), training);
+//                        logger.debug("training: " + training.getTrainingId() + " successfully saved");
                     }
 
                 });

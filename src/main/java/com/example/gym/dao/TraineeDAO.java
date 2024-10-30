@@ -14,7 +14,7 @@ public class TraineeDAO implements GenericDAO<Trainee> {
     private static final Logger logger = LoggerFactory.getLogger(TraineeDAO.class);
     @Override
     public void save(Trainee trainee) {
-        traineeMap.put(trainee.getId(), trainee);
+//        traineeMap.put(trainee.getId(), trainee);
         logger.info("trainee: " + trainee.getId() + " successfully saved");
     }
 
@@ -29,12 +29,12 @@ public class TraineeDAO implements GenericDAO<Trainee> {
     @Override
     public List<Trainee> findAll() {
         List<Trainee> traineeList = new ArrayList<>(traineeMap.values());
-        traineeList.sort(new Comparator<Trainee>() {
-            @Override
-            public int compare(Trainee o1, Trainee o2) {
-                return o1.getLastName().compareTo(o2.getLastName());
-            }
-        });
+//        traineeList.sort(new Comparator<Trainee>() {
+//            @Override
+//            public int compare(Trainee o1, Trainee o2) {
+//                return o1.getLastName().compareTo(o2.getLastName());
+//            }
+//        });
         logger.info(traineeMap.size() + " : trainees has been found");
         return traineeList;
     }

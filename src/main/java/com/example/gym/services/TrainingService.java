@@ -18,12 +18,12 @@ public class TrainingService {
     public Training createTrainingProfile(int trainingId, int traineeId, int trainerId, String trainingName, String trainingType, String trainingDate, int trainingDuration) {
         logger.debug("Creating Training profile with name: {}", trainingName);
         Training training = new Training();
-        training.setTrainingId(trainingId);
-        training.setTraineeId(traineeId);
-        training.setTrainerId(trainerId);
-        training.setTrainingName(trainingName);
-        training.setTrainingType(trainingType);
-        training.setTrainingDate(trainingDate);
+//        training.setTrainingId(trainingId);
+//        training.setTraineeId(traineeId);
+//        training.setTrainerId(trainerId);
+//        training.setTrainingName(trainingName);
+//        training.setTrainingType(trainingType);
+//        training.setTrainingDate(trainingDate);
         training.setTrainingDuration(trainingDuration);
         trainingDAO.save(training);
         logger.debug("Training profile created: {}", training);

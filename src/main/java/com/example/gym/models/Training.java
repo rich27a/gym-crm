@@ -1,80 +1,101 @@
 package com.example.gym.models;
 
+import jakarta.persistence.*;
+
+import java.util.Date;
+
+@Entity
+@Table(name = "trainings")
 public class Training{
-    private int trainingId;
-    private int traineeId;
-    private int trainerId;
-    private String trainingName;
-    private String trainingType;
-    private String trainingDate;
-    private int trainingDuration;
+    @Id
+    @Column(name = "training_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Trainee trainee;
 
-    public int getTrainingId() {
-        return trainingId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Trainer trainer;
+
+    @Column(name = "training_name", nullable = false)
+    private String name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private TrainingType trainingType;
+
+    @Column(name = "training_date", nullable = false)
+    private Date trainingDate;
+
+    @Column(name = "training_duration")
+    private Integer trainingDuration;
+
+    public Training() {
     }
 
-    public void setTrainingId(int trainingId) {
-        this.trainingId = trainingId;
-    }
-
-    public int getTraineeId() {
-        return traineeId;
-    }
-
-    public void setTraineeId(int traineeId) {
-        this.traineeId = traineeId;
-    }
-
-    public int getTrainerId() {
-        return trainerId;
-    }
-
-    public void setTrainerId(int trainerId) {
-        this.trainerId = trainerId;
-    }
-
-    public String getTrainingName() {
-        return trainingName;
-    }
-
-    public void setTrainingName(String trainingName) {
-        this.trainingName = trainingName;
-    }
-
-    public String getTrainingType() {
-        return trainingType;
-    }
-
-    public void setTrainingType(String trainingType) {
+    public Training(Long id, Trainee trainee, Trainer trainer, String name, TrainingType trainingType, Date trainingDate, Integer trainingDuration) {
+        this.id = id;
+        this.trainee = trainee;
+        this.trainer = trainer;
+        this.name = name;
         this.trainingType = trainingType;
-    }
-
-    public String getTrainingDate() {
-        return trainingDate;
-    }
-
-    public void setTrainingDate(String trainingDate) {
         this.trainingDate = trainingDate;
-    }
-
-    public int getTrainingDuration() {
-        return trainingDuration;
-    }
-
-    public void setTrainingDuration(int trainingDuration) {
         this.trainingDuration = trainingDuration;
     }
 
-    @Override
-    public String toString() {
-        return "Training{" +
-                ", traineeId=" + traineeId +
-                ", trainerId=" + trainerId +
-                ", trainingName='" + trainingName + '\'' +
-                ", trainingType='" + trainingType + '\'' +
-                ", trainingDate='" + trainingDate + '\'' +
-                ", trainingDuration=" + trainingDuration +
-                '}';
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Trainee getTrainee() {
+        return trainee;
+    }
+
+    public void setTrainee(Trainee trainee) {
+        this.trainee = trainee;
+    }
+
+    public Trainer getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public TrainingType getTrainingType() {
+        return trainingType;
+    }
+
+    public void setTrainingType(TrainingType trainingType) {
+        this.trainingType = trainingType;
+    }
+
+    public Date getTrainingDate() {
+        return trainingDate;
+    }
+
+    public void setTrainingDate(Date trainingDate) {
+        this.trainingDate = trainingDate;
+    }
+
+    public Integer getTrainingDuration() {
+        return trainingDuration;
+    }
+
+    public void setTrainingDuration(Integer trainingDuration) {
+        this.trainingDuration = trainingDuration;
     }
 }

@@ -17,8 +17,8 @@ public class TrainingDAO implements GenericDAO<Training> {
     private Map<Integer, Training> trainingMap;
     @Override
     public void save(Training training) {
-        trainingMap.put(training.getTrainingId(), training);
-        logger.info("training: " + training.getTrainingId() + "successfully saved");
+//        trainingMap.put(training.getTrainingId(), training);
+//        logger.info("training: " + training.getTrainingId() + "successfully saved");
     }
 
     @Override

@@ -24,7 +24,8 @@ public class TrainerService {
         UUID uuid = UUID.randomUUID();
         int id = uuid.hashCode();
         logger.debug("generating id: {}", id);
-        Trainer trainer = new Trainer(id, firstName, lastName, username, password, true, specialization);
+        Trainer trainer = null;
+//        Trainer trainer = new Trainer(id, firstName, lastName, username, password, true, specialization);
         trainerDAO.save(trainer);
         logger.debug("trainer with id: {} ", id + " successfully created...");
         return trainer;
@@ -34,9 +35,9 @@ public class TrainerService {
         Optional<Trainer> trainerOpt = trainerDAO.findById(id);
         if (trainerOpt.isPresent()) {
             Trainer trainer = trainerOpt.get();
-            trainer.setFirstName(firstName);
-            trainer.setLastName(lastName);
-            trainer.setSpecialization(specialization);
+//            trainer.setFirstName(firstName);
+//            trainer.setLastName(lastName);
+//            trainer.setSpecialization(specialization);
             trainerDAO.save(trainer);
             logger.debug("trainee with id: {}" , id + " successfully updated");
 
