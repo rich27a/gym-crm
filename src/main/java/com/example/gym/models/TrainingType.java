@@ -2,6 +2,9 @@ package com.example.gym.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "trainingTypes")
 public class TrainingType {
@@ -14,12 +17,19 @@ public class TrainingType {
     @Column(nullable = false)
     private String trainingType;
 
+
+    @Column
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "trainingType_id")
+    private List<Trainee> traineeList = new ArrayList<>();
+
     public TrainingType() {
     }
 
-    public TrainingType(Long id, String trainingType) {
+    public TrainingType(Long id, String trainingType, List<Trainee> traineeList) {
         this.id = id;
         this.trainingType = trainingType;
+        this.traineeList = traineeList;
     }
 
     public Long getId() {
@@ -36,5 +46,13 @@ public class TrainingType {
 
     public void setTrainingType(String trainingType) {
         this.trainingType = trainingType;
+    }
+
+    public List<Trainee> getTraineeList() {
+        return traineeList;
+    }
+
+    public void setTraineeList(List<Trainee> traineeList) {
+        this.traineeList = traineeList;
     }
 }

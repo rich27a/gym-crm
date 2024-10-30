@@ -1,35 +1,52 @@
 package com.example.gym.models;
 
-public class Trainer extends User{
-    private Specialization specialization;
+import jakarta.persistence.*;
 
-    public Trainer(){
+@Entity
+@Table(name = "trainers")
+public class Trainer{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "trainer_id")
+    private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TrainingType trainingType;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Trainer() {
     }
 
-    public Trainer(int id, String firstName, String lastName, String username, String password, boolean isActive, Specialization specialization) {
-        super(id, firstName, lastName, username, password, isActive);
-        this.specialization = specialization;
+    public Trainer(Long id, TrainingType trainingType, User user) {
+        this.id = id;
+        this.trainingType = trainingType;
+        this.user = user;
     }
 
-
-    public Specialization getSpecialization() {
-        return specialization;
+    public Long getId() {
+        return id;
     }
 
-    public void setSpecialization(Specialization specialization) {
-        this.specialization = specialization;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Trainer{" +
-                "id=" + getId() +
-                ", firstName='" + getFirstName() + '\'' +
-                ", lastName='" + getLastName() + '\'' +
-                ", username='" + getUsername() + '\'' +
-                ", isActive=" + isActive() +
-                "specialization=" + specialization +
-                '}';
+    public TrainingType getTrainingType() {
+        return trainingType;
+    }
+
+    public void setTrainingType(TrainingType trainingType) {
+        this.trainingType = trainingType;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
