@@ -2,6 +2,7 @@ package com.example.gym.services;
 
 import com.example.gym.dao.TraineeDAO;
 import com.example.gym.models.Trainee;
+import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.utils.Profile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,13 @@ import java.util.UUID;
 public class TraineeService {
     @Autowired
     private TraineeDAO traineeDAO;
+
+    private final TraineeRepository traineeRepository;
+
+    public TraineeService(TraineeRepository traineeRepository) {
+        this.traineeRepository = traineeRepository;
+    }
+
     private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
     public Trainee createTraineeProfile(String firstName, String lastName,
