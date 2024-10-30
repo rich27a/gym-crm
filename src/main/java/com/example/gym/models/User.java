@@ -3,10 +3,12 @@ package com.example.gym.models;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "user_id")
+    private Long id;
     @Column
     private String firstName;
     @Column
@@ -21,7 +23,7 @@ public class User {
     public User() {
     }
 
-    public User(int id, String firstName, String lastName, String username, String password, boolean isActive) {
+    public User(Long id, String firstName, String lastName, String username, String password, boolean isActive) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,11 +32,11 @@ public class User {
         this.isActive = isActive;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,17 +78,5 @@ public class User {
 
     public void setActive(boolean active) {
         isActive = active;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", isActive=" + isActive +
-                '}';
     }
 }

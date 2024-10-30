@@ -1,24 +1,47 @@
 package com.example.gym.models;
 
 
-public class Trainee extends User{
-    private String dateOfBirth;
+import jakarta.persistence.*;
+
+import java.util.Date;
+
+@Entity
+@Table(name = "trainees")
+public class Trainee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column
+    private Date dateOfBirth;
+    @Column
     private String address;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Trainee() {
     }
 
-    public Trainee(int id, String firstName, String lastName, String username, String password, boolean isActive, String dateOfBirth, String address) {
-        super(id, firstName, lastName, username, password, isActive);
+    public Trainee(Long id, Date dateOfBirth, String address, User user) {
+        this.id = id;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
+        this.user = user;
     }
 
-    public String getDateOfBirth() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -30,16 +53,11 @@ public class Trainee extends User{
         this.address = address;
     }
 
-    @Override
-    public String toString() {
-        return "Trainee{" +
-                "id=" + getId() +
-                ", firstName='" + getFirstName() + '\'' +
-                ", lastName='" + getLastName() + '\'' +
-                ", username='" + getUsername() + '\'' +
-                ", isActive=" + isActive() +
-                "dateOfBirth=" + dateOfBirth +
-                ", address='" + address + '\'' +
-                '}';
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

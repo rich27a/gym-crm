@@ -24,8 +24,9 @@ public class TraineeService {
         UUID uuid = UUID.randomUUID();
         int id = uuid.hashCode();
         logger.debug("generating id: {}" , id);
-        Trainee trainee = new Trainee(id, firstName, lastName, username, password,
-                true, dateOfBirth, address);
+        Trainee trainee = null;
+//        Trainee trainee = new Trainee(id, firstName, lastName, username, password,
+//                true, dateOfBirth, address);
         traineeDAO.save(trainee);
         logger.debug("trainee with id: {}" , id + "successfully created...");
         return trainee;
@@ -36,10 +37,10 @@ public class TraineeService {
         Optional<Trainee> traineeOpt = traineeDAO.findById(id);
         if (traineeOpt.isPresent()) {
             Trainee trainee = traineeOpt.get();
-            trainee.setFirstName(firstName);
-            trainee.setLastName(lastName);
-            trainee.setAddress(address);
-            trainee.setDateOfBirth(dateOfBirth);
+//            trainee.setFirstName(firstName);
+//            trainee.setLastName(lastName);
+//            trainee.setAddress(address);
+//            trainee.setDateOfBirth(dateOfBirth);
             traineeDAO.save(trainee);
             logger.debug("trainee with id: {}" , id + " successfully updated");
         }else {
