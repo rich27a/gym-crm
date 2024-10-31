@@ -1,5 +1,6 @@
 package com.example.gym.facade;
 
+import com.example.gym.dtos.TraineeUserDTO;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
@@ -35,8 +36,9 @@ public class GymFacade {
         return trainerService.selectTrainerProfile(id);
     }
 
-    public Trainee createTrainee(String firstName, String lastName, String dateOfBirth, String address) {
-        return traineeService.createTraineeProfile(firstName, lastName, dateOfBirth, address);
+    public TraineeUserDTO createTrainee(String firstName, String lastName, String dateOfBirth, String address) {
+//        return traineeService.createTraineeProfile(firstName, lastName, dateOfBirth, address);
+        return null;
     }
 
     public Optional<Trainee> updateTrainee(int id, String firstName, String lastName, String dateOfBirth, String address) {

@@ -1,43 +1,30 @@
-package com.example.gym.models;
+package com.example.gym.dtos;
 
-import jakarta.persistence.*;
+import java.util.Date;
 
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    private Long id;
-    @Column(nullable = false)
+public class TraineeUserDTO {
     private String firstName;
-    @Column(nullable = false)
     private String lastName;
-    @Column(nullable = false)
     private String username;
-    @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
     private boolean isActive;
 
-    public User() {
+    private Date dateOfBirth;
+    private String address;
+    private Long userId;
+
+    public TraineeUserDTO() {
     }
 
-    public User(Long id, String firstName, String lastName, String username, String password, boolean isActive) {
-        this.id = id;
+    public TraineeUserDTO(String firstName, String lastName, String username, String password, boolean isActive, Date dateOfBirth, String address, Long userId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.isActive = isActive;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -78,5 +65,29 @@ public class User {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
