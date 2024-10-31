@@ -45,7 +45,10 @@ public class TraineeServiceTest {
 
         trainee = new Trainee();
         trainee.setId(1L);
-        trainee.setUser(user);
+        trainee.setFirstName("John");
+        trainee.setLastName("Doe");
+        trainee.setActive(true);
+//        trainee.setUser(user);
     }
 
     @Test
@@ -57,18 +60,18 @@ public class TraineeServiceTest {
 
         Trainee savedTrainee = traineeService.createTraineeProfile(trainee);
         assertNotNull(savedTrainee);
-        assertEquals(savedTrainee.getUser().getUsername(), "John.Doe");
-        assertNotEquals(savedTrainee.getUser().getPassword(), "1234");
+        assertEquals(savedTrainee.getUsername(), "John.Doe");
+        assertNotEquals(savedTrainee.getPassword(), "1234");
     }
 
     @Test
     @DisplayName("Find a trainee by id")
     public void testFindTraineeById() {
-        trainee.getUser().setFirstName("Juan");
+        trainee.setFirstName("Juan");
         when(traineeRepository.findById(1L)).thenReturn(Optional.of(trainee));
         Optional<Trainee> foundTrainee = traineeService.selectTraineeProfile(1L);
         assertTrue(foundTrainee.isPresent());
-        assertEquals("Juan", foundTrainee.get().getUser().getFirstName());
+        assertEquals("Juan", foundTrainee.get().getFirstName());
     }
 
     @Test
@@ -82,17 +85,17 @@ public class TraineeServiceTest {
     @DisplayName("Find trainee by username")
     public void testFindTraineeByUsername(){
         String username = "John.Doe";
-        trainee.getUser().setUsername("John.Doe");
+        trainee.setUsername("John.Doe");
         when(traineeRepository.findByUsername(username)).thenReturn(Optional.of(trainee));
         Optional<Trainee> traineeOptional = traineeService.findTraineeByUsername(username);
-        assertEquals(traineeOptional.get().getUser().getUsername(), "John.Doe");
+        assertEquals(traineeOptional.get().getUsername(), "John.Doe");
     }
 
     @Test
     @DisplayName("Find trainee by username")
     public void testFindTraineeByUsernameNotFound(){
         String username = "John.Rax";
-        trainee.getUser().setUsername("John.Doe");
+        trainee.setUsername("John.Doe");
         when(traineeRepository.findByUsername(username)).thenReturn(Optional.empty());
         Optional<Trainee> traineeOptional = traineeService.findTraineeByUsername(username);
         assertTrue(traineeOptional.isEmpty());

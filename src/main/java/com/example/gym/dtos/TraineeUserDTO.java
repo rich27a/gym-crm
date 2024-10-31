@@ -20,14 +20,14 @@ public class TraineeUserDTO {
     }
 
     public TraineeUserDTO(Trainee trainee){
-        this.firstName = trainee.getUser().getFirstName();
-        this.lastName = trainee.getUser().getLastName();
-        this.username = trainee.getUser().getUsername();
-        this.password = trainee.getUser().getPassword();
-        this.isActive = trainee.getUser().isActive();
-        this.dateOfBirth = trainee.getDateOfBirth();
-        this.address = trainee.getAddress();
-        this.userId = trainee.getUser().getId();
+//        this.firstName = trainee.getUser().getFirstName();
+//        this.lastName = trainee.getUser().getLastName();
+//        this.username = trainee.getUser().getUsername();
+//        this.password = trainee.getUser().getPassword();
+//        this.isActive = trainee.getUser().isActive();
+//        this.dateOfBirth = trainee.getDateOfBirth();
+//        this.address = trainee.getAddress();
+//        this.userId = trainee.getUser().getId();
     }
 
     public TraineeUserDTO(String firstName, String lastName, String username, String password, boolean isActive, Date dateOfBirth, String address, Long userId) {

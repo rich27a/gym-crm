@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "trainees")
-public class Trainee {
+public class Trainee extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -15,18 +15,18 @@ public class Trainee {
     private Date dateOfBirth;
     @Column
     private String address;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @OneToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     public Trainee() {
     }
 
-    public Trainee(Long id, Date dateOfBirth, String address, User user) {
+    public Trainee(Long id, Date dateOfBirth, String address) {
         this.id = id;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
-        this.user = user;
+//        this.user = user;
     }
 
     public Long getId() {
@@ -53,11 +53,11 @@ public class Trainee {
         this.address = address;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 }

@@ -32,10 +32,11 @@ public class TraineeService {
     @Transactional
     public Trainee createTraineeProfile(Trainee trainee) {
         logger.debug("starting createTraineeProfile...");
-        String username = Profile.generateUsername(trainee.getUser().getFirstName(), trainee.getUser().getLastName());
+        String username = Profile.generateUsername(trainee.getFirstName(),trainee.getLastName());
         String password = Profile.generatePassword();
-        trainee.getUser().setUsername(username);
-        trainee.getUser().setPassword(password);
+        trainee.setUsername(username);
+        trainee.setPassword(password);
+        trainee.setActive(true);
         logger.info("saving trainee with id {}", trainee.getId());
         return traineeRepository.save(trainee);
     }
@@ -86,7 +87,7 @@ public class TraineeService {
 
         traineeUserDTO.setUsername(user.getUsername());
         traineeUserDTO.setPassword(user.getPassword());
-        userRepository.save(user);
+//        userRepository.save(user);
         logger.debug("trainee with id: {}" , user.getId() + "successfully created...");
         return user;
     }
@@ -94,7 +95,7 @@ public class TraineeService {
         Trainee trainee = new Trainee();
         trainee.setDateOfBirth(traineeUserDTO.getDateOfBirth());
         trainee.setAddress(traineeUserDTO.getAddress());
-        trainee.setUser(user);
+//        trainee.setUser(user);
         traineeRepository.save(trainee);
         logger.debug("trainee with id: {}" , trainee.getId() + "successfully created...");
         return trainee;
