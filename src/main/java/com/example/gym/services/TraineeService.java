@@ -48,6 +48,13 @@ public class TraineeService {
     }
 
     @Transactional
+    public Optional<Trainee> findTraineeById(Long id){
+        logger.info("searching for trainee with id {}", id);
+        System.out.println(traineeRepository.findById(id));
+        return traineeRepository.findById(id);
+    }
+
+    @Transactional
     public Optional<Trainee> updateTraineeProfile(Trainee trainee) {
         Long id = trainee.getId();
         Optional<Trainee> traineeOpt = traineeRepository.findById(id);

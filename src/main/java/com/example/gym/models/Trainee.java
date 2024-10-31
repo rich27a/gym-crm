@@ -8,9 +8,9 @@ import java.util.Date;
 @Entity
 @Table(name = "trainees")
 public class Trainee extends User{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
     @Column
     private Date dateOfBirth;
     @Column
@@ -22,20 +22,20 @@ public class Trainee extends User{
     public Trainee() {
     }
 
-    public Trainee(Long id, Date dateOfBirth, String address) {
-        this.id = id;
+    public Trainee(Date dateOfBirth, String address) {
+//        this.id = id;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
 //        this.user = user;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public Date getDateOfBirth() {
         return dateOfBirth;

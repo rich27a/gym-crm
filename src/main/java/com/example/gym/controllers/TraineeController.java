@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/trainees")
@@ -24,5 +25,10 @@ public class TraineeController {
     @GetMapping
     public List<Trainee> getAllTrainees(){
         return new ArrayList<>();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Trainee> getTraineeById(@PathVariable Long id){
+        return traineeService.findTraineeById(id);
     }
 }
