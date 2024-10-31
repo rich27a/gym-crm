@@ -6,14 +6,14 @@ import com.example.gym.models.User;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.UserRepository;
 import com.example.gym.services.TraineeService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.util.Optional;
@@ -22,8 +22,6 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-
-@RunWith(MockitoJUnitRunner.class)
 public class TraineeServiceTest {
 
     @InjectMocks
@@ -33,22 +31,26 @@ public class TraineeServiceTest {
     @Mock
     private UserRepository userRepository;
 
-
-
-
-
-    @Test
-    @DisplayName("testing creating a new trainee")
-    public void testSaveTrainee(){
-        TraineeUserDTO traineeUserDTO = new TraineeUserDTO("John", "Doe", "", "1234", true, null, "test", 1l);
-        User user = new User();
+    private TraineeUserDTO traineeUserDTO;
+    private User user;
+    private Trainee trainee;
+    @BeforeEach
+    public void setUp(){
+        MockitoAnnotations.openMocks(this);
+        traineeUserDTO = new TraineeUserDTO("John", "Doe", "", "1234", true, null, "test", 1l);
+        user = new User();
         user.setId(1L);
         user.setFirstName(traineeUserDTO.getFirstName());
         user.setLastName(traineeUserDTO.getLastName());
 
-        Trainee trainee = new Trainee();
-        trainee.setId(2L);
+        trainee = new Trainee();
+        trainee.setId(1L);
         trainee.setUser(user);
+    }
+
+    @Test
+    @DisplayName("testing creating a new trainee")
+    public void testSaveTrainee(){
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(traineeRepository.save(any(Trainee.class))).thenReturn(trainee);
@@ -62,17 +64,40 @@ public class TraineeServiceTest {
     @Test
     @DisplayName("Find a trainee by id")
     public void testFindTraineeById() {
-        Trainee trainee = new Trainee();
-//        trainee.setId(1);
-//        trainee.setFirstName("Juan");
-//        trainee.setLastName("Perez");
-
-//        when(traineeDAO.findById(1)).thenReturn(Optional.of(trainee));
-//
-        Optional<Trainee> foundTrainee = traineeService.selectTraineeProfile(1);
-
+        trainee.getUser().setFirstName("Juan");
+        when(traineeRepository.findById(1L)).thenReturn(Optional.of(trainee));
+        Optional<Trainee> foundTrainee = traineeService.selectTraineeProfile(1L);
         assertTrue(foundTrainee.isPresent());
-//        assertEquals("Juan", foundTrainee.get().getFirstName());
+        assertEquals("Juan", foundTrainee.get().getUser().getFirstName());
     }
+
+    @Test
+    @DisplayName("Return optional empty when trainee is not found")
+    public void testFindTraineeByIdNotFound(){
+        when(traineeRepository.findById(2L)).thenReturn(Optional.empty());
+        Optional<Trainee> foundTrainee = traineeService.selectTraineeProfile(2L);
+        assertTrue(foundTrainee.isEmpty());
+    }
+    @Test
+    @DisplayName("Find trainee by username")
+    public void testFindTraineeByUsername(){
+        String username = "John.Doe";
+        trainee.getUser().setUsername("John.Doe");
+        when(traineeRepository.findByUsername(username)).thenReturn(Optional.of(trainee));
+        Optional<Trainee> traineeOptional = traineeService.findTraineeByUsername(username);
+        assertEquals(traineeOptional.get().getUser().getUsername(), "John.Doe");
+    }
+
+    @Test
+    @DisplayName("Find trainee by username")
+    public void testFindTraineeByUsernameNotFound(){
+        String username = "John.Rax";
+        trainee.getUser().setUsername("John.Doe");
+        when(traineeRepository.findByUsername(username)).thenReturn(Optional.empty());
+        Optional<Trainee> traineeOptional = traineeService.findTraineeByUsername(username);
+        assertTrue(traineeOptional.isEmpty());
+    }
+
+
 
 }

@@ -45,11 +45,11 @@ public class GymFacade {
         return traineeService.updateTraineeProfile(id, firstName, lastName, dateOfBirth, address);
     }
 
-    public void deleteTrainee(int id) {
-        traineeService.deleteTraineeProfile(id);
+    public void deleteTrainee(String username) {
+        traineeService.deleteTraineeByUsername(username);
     }
 
-    public Optional<Trainee> getTrainee(int id) {
+    public Optional<Trainee> getTrainee(Long id) {
         return traineeService.selectTraineeProfile(id);
     }
 

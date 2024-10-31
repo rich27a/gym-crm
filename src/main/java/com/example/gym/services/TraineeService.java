@@ -3,11 +3,11 @@ package com.example.gym.services;
 import com.example.gym.dao.TraineeDAO;
 import com.example.gym.dtos.TraineeUserDTO;
 import com.example.gym.models.Trainee;
-import com.example.gym.models.Trainer;
 import com.example.gym.models.User;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.UserRepository;
 import com.example.gym.utils.Profile;
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +34,15 @@ public class TraineeService {
 
     @Transactional
     public TraineeUserDTO createTraineeProfile(TraineeUserDTO traineeUserDTO) {
-        logger.debug("starting createTraineProfile...");
+        logger.debug("starting createTraineeProfile...");
         User user = createUser(traineeUserDTO);
         Trainee trainee = createTrainee(traineeUserDTO, user);
-        traineeUserDTO.setUserId(user.getId());
-        return traineeUserDTO;
+        return new TraineeUserDTO(trainee);
+    }
+
+    @Transactional
+    public Optional<Trainee> findTraineeByUsername(String username){
+        return traineeRepository.findByUsername(username);
     }
 
     public Optional<Trainee> updateTraineeProfile(int id, String firstName, String lastName,
@@ -58,12 +62,21 @@ public class TraineeService {
         return traineeOpt;
     }
 
-    public void deleteTraineeProfile(int id) {
-        traineeDAO.delete(id);
+    @Transactional
+    public boolean deleteTraineeByUsername(String username) {
+        Optional<Trainee> trainee = traineeRepository.findByUsername(username);
+        if(trainee.isPresent()){
+            traineeRepository.delete(trainee.get());
+            logger.info("Trainee with username {} succesfully deleted", username);
+            return true;
+        }else {
+            logger.warn("Trainee with username {} not found. No deletion performed");
+            return false;
+        }
     }
 
-    public Optional<Trainee> selectTraineeProfile(int id) {
-        return traineeDAO.findById(id);
+    public Optional<Trainee> selectTraineeProfile(Long id) {
+        return traineeRepository.findById(id);
     }
 
     private User createUser(TraineeUserDTO traineeUserDTO){
@@ -86,7 +99,6 @@ public class TraineeService {
         trainee.setAddress(traineeUserDTO.getAddress());
         trainee.setUser(user);
         traineeRepository.save(trainee);
-
         logger.debug("trainee with id: {}" , trainee.getId() + "successfully created...");
         return trainee;
     }
