@@ -31,17 +31,10 @@ public class TraineeServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    private TraineeUserDTO traineeUserDTO;
-    private User user;
     private Trainee trainee;
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
-        user = new User();
-        user.setId(1L);
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setActive(true);
 
         trainee = new Trainee();
         trainee.setId(1L);
@@ -55,7 +48,6 @@ public class TraineeServiceTest {
     @DisplayName("testing creating a new trainee")
     public void testSaveTrainee(){
 
-        when(userRepository.save(any(User.class))).thenReturn(user);
         when(traineeRepository.save(any(Trainee.class))).thenReturn(trainee);
 
         Trainee savedTrainee = traineeService.createTraineeProfile(trainee);
