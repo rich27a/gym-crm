@@ -7,7 +7,6 @@ import com.example.gym.models.User;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.UserRepository;
 import com.example.gym.utils.Profile;
-import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +21,9 @@ public class TraineeService {
     private TraineeDAO traineeDAO;
 
     private final TraineeRepository traineeRepository;
-    private final UserRepository userRepository;
 
-    public TraineeService(TraineeRepository traineeRepository, UserRepository userRepository) {
+    public TraineeService(TraineeRepository traineeRepository) {
         this.traineeRepository = traineeRepository;
-        this.userRepository = userRepository;
     }
 
 
