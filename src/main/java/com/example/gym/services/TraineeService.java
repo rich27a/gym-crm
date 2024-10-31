@@ -33,33 +33,33 @@ public class TraineeService {
     private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
     @Transactional
-    public TraineeUserDTO createTraineeProfile(TraineeUserDTO traineeUserDTO) {
+    public Trainee createTraineeProfile(Trainee trainee) {
         logger.debug("starting createTraineeProfile...");
-        User user = createUser(traineeUserDTO);
-        Trainee trainee = createTrainee(traineeUserDTO, user);
-        return new TraineeUserDTO(trainee);
+        String username = Profile.generateUsername(trainee.getUser().getFirstName(), trainee.getUser().getLastName());
+        String password = Profile.generatePassword();
+        trainee.getUser().setUsername(username);
+        trainee.getUser().setPassword(password);
+        logger.info("saving trainee with id {}", trainee.getId());
+        return traineeRepository.save(trainee);
     }
 
     @Transactional
     public Optional<Trainee> findTraineeByUsername(String username){
+        logger.info("searching for trainee with username {}", username);
         return traineeRepository.findByUsername(username);
     }
 
-    public Optional<Trainee> updateTraineeProfile(int id, String firstName, String lastName,
-                                                  String dateOfBirth, String address) {
-        Optional<Trainee> traineeOpt = traineeDAO.findById(id);
+    @Transactional
+    public Optional<Trainee> updateTraineeProfile(Trainee trainee) {
+        Long id = trainee.getId();
+        Optional<Trainee> traineeOpt = traineeRepository.findById(id);
         if (traineeOpt.isPresent()) {
-            Trainee trainee = traineeOpt.get();
-//            trainee.setFirstName(firstName);
-//            trainee.setLastName(lastName);
-//            trainee.setAddress(address);
-//            trainee.setDateOfBirth(dateOfBirth);
-            traineeDAO.save(trainee);
             logger.debug("trainee with id: {}" , id + " successfully updated");
+            return Optional.of(traineeRepository.save(trainee));
         }else {
             logger.warn("trainee with id: " + id + " not found");
+            return traineeOpt;
         }
-        return traineeOpt;
     }
 
     @Transactional

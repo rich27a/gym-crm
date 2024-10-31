@@ -41,8 +41,8 @@ public class GymFacade {
         return null;
     }
 
-    public Optional<Trainee> updateTrainee(int id, String firstName, String lastName, String dateOfBirth, String address) {
-        return traineeService.updateTraineeProfile(id, firstName, lastName, dateOfBirth, address);
+    public Optional<Trainee> updateTrainee(Trainee trainee) {
+        return traineeService.updateTraineeProfile(trainee);
     }
 
     public void deleteTrainee(String username) {

@@ -37,11 +37,11 @@ public class TraineeServiceTest {
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
-        traineeUserDTO = new TraineeUserDTO("John", "Doe", "", "1234", true, null, "test", 1l);
         user = new User();
         user.setId(1L);
-        user.setFirstName(traineeUserDTO.getFirstName());
-        user.setLastName(traineeUserDTO.getLastName());
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setActive(true);
 
         trainee = new Trainee();
         trainee.setId(1L);
@@ -55,10 +55,10 @@ public class TraineeServiceTest {
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(traineeRepository.save(any(Trainee.class))).thenReturn(trainee);
 
-        TraineeUserDTO savedTraineeUserDTO = traineeService.createTraineeProfile(traineeUserDTO);
-        assertNotNull(savedTraineeUserDTO);
-        assertEquals(savedTraineeUserDTO.getUsername(), "John.Doe");
-        assertNotEquals(savedTraineeUserDTO.getPassword(), "1234");
+        Trainee savedTrainee = traineeService.createTraineeProfile(trainee);
+        assertNotNull(savedTrainee);
+        assertEquals(savedTrainee.getUser().getUsername(), "John.Doe");
+        assertNotEquals(savedTrainee.getUser().getPassword(), "1234");
     }
 
     @Test
