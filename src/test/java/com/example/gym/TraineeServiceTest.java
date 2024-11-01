@@ -1,19 +1,14 @@
 package com.example.gym;
 
-import com.example.gym.dtos.TraineeUserDTO;
 import com.example.gym.models.Trainee;
-import com.example.gym.models.User;
 import com.example.gym.repositories.TraineeRepository;
-import com.example.gym.repositories.UserRepository;
 import com.example.gym.services.TraineeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
 
 import java.util.Optional;
@@ -28,20 +23,16 @@ public class TraineeServiceTest {
     private TraineeService traineeService;
     @Mock
     private TraineeRepository traineeRepository;
-    @Mock
-    private UserRepository userRepository;
 
     private Trainee trainee;
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
-
         trainee = new Trainee();
         trainee.setId(1L);
         trainee.setFirstName("John");
         trainee.setLastName("Doe");
         trainee.setActive(true);
-//        trainee.setUser(user);
     }
 
     @Test

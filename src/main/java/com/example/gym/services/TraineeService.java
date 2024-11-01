@@ -24,7 +24,7 @@ public class TraineeService {
 
     @Transactional
     public Trainee createTraineeProfile(Trainee trainee) {
-        logger.debug("starting createTraineeProfile...");
+        logger.info("starting createTraineeProfile...");
         String username = Profile.generateUsername(trainee.getFirstName(),trainee.getLastName());
         String password = Profile.generatePassword();
         trainee.setUsername(username);

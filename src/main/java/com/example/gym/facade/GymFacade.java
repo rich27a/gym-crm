@@ -24,8 +24,8 @@ public class GymFacade {
         this.trainingService = trainingService;
     }
 
-    public Trainer createTrainer(String firstName, String lastName, Specialization specialization) {
-        return trainerService.createTrainerProfile(firstName, lastName, specialization);
+    public Trainer createTrainer(Trainer trainer) {
+        return trainerService.createTrainerProfile(trainer);
     }
 
     public Optional<Trainer> updateTrainer(int id, String firstName, String lastName, Specialization specialization) {

@@ -1,50 +1,54 @@
 package com.example.gym;
 
-import com.example.gym.dao.TrainerDAO;
-import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
+import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.services.TrainerService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.DisplayName;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-@RunWith(MockitoJUnitRunner.class)
 
 public class TrainerServiceTest {
     @InjectMocks
     private TrainerService trainerService;
 
     @Mock
-    private TrainerDAO trainerDAO;
+    private TrainerRepository trainerRepository;
+
+    private Trainer trainer;
+
+    @BeforeEach
+    public void setUp(){
+        MockitoAnnotations.openMocks(this);
+        trainer = new Trainer();
+        trainer.setId(1L);
+        trainer.setFirstName("John");
+        trainer.setLastName("Doe");
+        trainer.setActive(true);
+    }
 
     @Test
     public void testCreateTrainer(){
-        Mockito.doNothing().when(trainerDAO).save(Mockito.any(Trainer.class));
-
-        Trainer result = trainerService.createTrainerProfile("Juan", "Perez", Specialization.CARDIO);
-
-        Mockito.verify(trainerDAO).save(Mockito.any(Trainer.class));
-
-//        assertEquals("Juan", result.getFirstName());
-//        assertEquals("Perez", result.getLastName());
+        when(trainerRepository.save(any(Trainer.class))).thenReturn(trainer);
+        Trainer savedTrainer = trainerService.createTrainerProfile(trainer);
+        assertNotNull(savedTrainer);
+        assertEquals(savedTrainer.getUsername(), "John.Doe");
+        assertNotEquals(savedTrainer.getPassword(), "1234");
     }
 
     @Test
     public void testFindTrainerById() {
-        Trainer trainer = new Trainer();
-//        trainer.setId(1);
-//        trainer.setFirstName("Juan");
-//        trainer.setLastName("Perez");
 
-        Mockito.when(trainerDAO.findById(1)).thenReturn(Optional.of(trainer));
+        when(trainerRepository.findById(1L)).thenReturn(Optional.of(trainer));
 
         Optional<Trainer> foundTrainer = trainerService.selectTrainerProfile(1);
 
