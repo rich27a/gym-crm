@@ -3,18 +3,35 @@ package com.example.gym.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "trainees")
 public class Trainee extends User{
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "trainee_id")
+    private Long id;
     @Column
     private Date dateOfBirth;
     @Column
     private String address;
+
+    @Column
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "trainee_user_id")
+    private List<Training> trainingList = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "trainee_trainer",
+            joinColumns = @JoinColumn(name = "trainee_id"),
+            inverseJoinColumns = @JoinColumn(name = "trainer_id")
+    )
+    private List<Trainer> trainers = new ArrayList<>();
+
+
 //    @OneToOne
 //    @JoinColumn(name = "user_id")
 //    private User user;
@@ -29,13 +46,13 @@ public class Trainee extends User{
 //        this.user = user;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Date getDateOfBirth() {
         return dateOfBirth;
@@ -53,7 +70,22 @@ public class Trainee extends User{
         this.address = address;
     }
 
-//    public User getUser() {
+    public List<Training> getTrainingList() {
+        return trainingList;
+    }
+
+    public void setTrainingList(List<Training> trainingList) {
+        this.trainingList = trainingList;
+    }
+
+    public List<Trainer> getTrainerList() {
+        return trainers;
+    }
+
+    public void setTrainerList(List<Trainer> trainerList) {
+        this.trainers = trainerList;
+    }
+    //    public User getUser() {
 //        return user;
 //    }
 //
