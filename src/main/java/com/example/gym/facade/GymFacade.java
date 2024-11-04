@@ -53,10 +53,10 @@ public class GymFacade {
         return traineeService.selectTraineeProfile(id);
     }
 
-    public Training createTraining(int trainingId, int traineeId, int trainerId, String trainingName, String trainingType, String trainingDate, int trainingDuration) {
-        return trainingService.createTrainingProfile(trainingId,traineeId, trainerId, trainingName, trainingType, trainingDate, trainingDuration);
+    public Training createTraining(Training training) {
+        return trainingService.createTraining(training);
     }
-    public Optional<Training> getTraining(int id) {
+    public Optional<Training> getTraining(Long id) {
         return trainingService.selectTrainingProfile(id);
     }
 }
