@@ -24,9 +24,9 @@ public class TrainingService {
     @Transactional
     public Training createTraining(Training training) {
         logger.debug("Creating Training with name: {}", training.getName());
-        Training savedTraining = trainingRepository.save(training);
-        return training;
+        return trainingRepository.save(training);
     }
+    @Transactional
     public Optional<Training> selectTrainingProfile(Long id) {
         logger.debug("Selecting Training profile with id: {}", id);
         return trainingRepository.findById(id);

@@ -2,6 +2,7 @@ package com.example.gym.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -25,7 +26,7 @@ public class Training{
     private TrainingType trainingType;
 
     @Column(name = "training_date", nullable = false)
-    private Date trainingDate;
+    private LocalDate trainingDate;
 
     @Column(name = "training_duration")
     private Integer trainingDuration;
@@ -33,7 +34,7 @@ public class Training{
     public Training() {
     }
 
-    public Training(Long id, Trainee trainee, Trainer trainer, String name, TrainingType trainingType, Date trainingDate, Integer trainingDuration) {
+    public Training(Long id, Trainee trainee, Trainer trainer, String name, TrainingType trainingType, LocalDate trainingDate, Integer trainingDuration) {
         this.id = id;
         this.trainee = trainee;
         this.trainer = trainer;
@@ -83,11 +84,11 @@ public class Training{
         this.trainingType = trainingType;
     }
 
-    public Date getTrainingDate() {
+    public LocalDate getTrainingDate() {
         return trainingDate;
     }
 
-    public void setTrainingDate(Date trainingDate) {
+    public void setTrainingDate(LocalDate trainingDate) {
         this.trainingDate = trainingDate;
     }
 

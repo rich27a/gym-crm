@@ -1,6 +1,8 @@
 package com.example.gym.services;
 
 import com.example.gym.models.Trainee;
+import com.example.gym.models.Training;
+import com.example.gym.models.TrainingType;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
@@ -8,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TraineeService {
@@ -70,6 +74,20 @@ public class TraineeService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    public List<Training> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, TrainingType trainingType) {
+        return traineeRepository.findByUsername(username)
+                .map(trainee -> trainee.getTrainingList().stream()
+                        .filter(training ->
+                                (fromDate == null || !training.getTrainingDate().isBefore(fromDate)) &&
+                                        (toDate == null || !training.getTrainingDate().isAfter(toDate)) &&
+                                        (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
+                                        (trainingType == null || training.getTrainingType() == trainingType)
+                        )
+                        .collect(Collectors.toList())
+                )
+                .orElseThrow(() -> new RuntimeException("Trainee not found with username: " + username));
     }
 
     public Optional<Trainee> selectTraineeProfile(Long id) {
