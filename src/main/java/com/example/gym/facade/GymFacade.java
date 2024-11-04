@@ -36,9 +36,8 @@ public class GymFacade {
         return trainerService.selectTrainerProfile(id);
     }
 
-    public TraineeUserDTO createTrainee(String firstName, String lastName, String dateOfBirth, String address) {
-//        return traineeService.createTraineeProfile(firstName, lastName, dateOfBirth, address);
-        return null;
+    public Trainee createTrainee(Trainee trainee) {
+        return traineeService.createTraineeProfile(trainee);
     }
 
     public Optional<Trainee> updateTrainee(Trainee trainee) {
