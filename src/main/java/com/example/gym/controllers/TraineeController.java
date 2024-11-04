@@ -4,7 +4,6 @@ import com.example.gym.models.Trainee;
 import com.example.gym.services.TraineeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,27 +18,30 @@ public class TraineeController {
     }
 
     @PostMapping
-    public Trainee saveTrainee(@RequestBody Trainee trainee){
+    public Trainee save(@RequestBody Trainee trainee){
         return traineeService.createTraineeProfile(trainee);
     }
+
+    @PutMapping
+    public Optional<Trainee> update(@RequestBody Trainee trainee){
+        return traineeService.updateTraineeProfile(trainee);
+    }
     @GetMapping
-    public List<Trainee> getAllTrainees(){
+    public List<Trainee> getAll(){
         return traineeService.getTrainees();
     }
 
     @GetMapping("/search/{username}")
-    public Trainee getTraineeByUsername(@PathVariable("username") String username){
-        System.out.println("searching trainee with username: " + username);
+    public Optional<Trainee> getByUsername(@PathVariable String username){
         return traineeService.findTraineeByUsername(username);
     }
     @DeleteMapping("/{username}")
-    public void saveUpdate(@PathVariable String username){
-        System.out.println("deleting trainee with username: " + username);
+    public void delete(@PathVariable String username){
         traineeService.deleteTraineeByUsername(username);
     }
 
     @GetMapping("/{id}")
-    public Optional<Trainee> getTraineeById(@PathVariable Long id){
+    public Optional<Trainee> getById(@PathVariable Long id){
         return traineeService.findTraineeById(id);
     }
 }

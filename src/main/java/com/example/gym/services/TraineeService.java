@@ -36,7 +36,7 @@ public class TraineeService {
     }
 
     @Transactional
-    public Trainee findTraineeByUsername(String username){
+    public Optional<Trainee> findTraineeByUsername(String username){
         logger.info("searching for trainee with username {}", username);
         return traineeRepository.findByUsername(username);
     }
@@ -50,30 +50,28 @@ public class TraineeService {
 
     @Transactional
     public Optional<Trainee> updateTraineeProfile(Trainee trainee) {
-        Long id = trainee.getId();
-        Optional<Trainee> traineeOpt = traineeRepository.findById(id);
-        if (traineeOpt.isPresent()) {
-            logger.debug("updating trainee with id: {}" , id);
-            return Optional.of(traineeRepository.save(trainee));
-        }else {
-            logger.warn("trainee with id: " + id + " not found");
-            return traineeOpt;
-        }
+        return traineeRepository.findById(trainee.getId())
+                .map(existingTrainee -> {
+                    existingTrainee.setFirstName(trainee.getFirstName());
+                    existingTrainee.setLastName(trainee.getLastName());
+                    existingTrainee.setDateOfBirth(trainee.getDateOfBirth());
+                    existingTrainee.setAddress(trainee.getAddress());
+                    existingTrainee.setUsername(Profile.generateUsername(existingTrainee.getFirstName(), existingTrainee.getLastName()));
+                    return traineeRepository.save(existingTrainee);
+                });
     }
 
     @Transactional
     public boolean deleteTraineeByUsername(String username) {
-        Trainee trainee = traineeRepository.findByUsername(username);
-        traineeRepository.delete(trainee);
-//        if(trainee.isPresent()){
-//            traineeRepository.delete(trainee.get());
-//            logger.info("Trainee with username {} succesfully deleted", username);
-//            return true;
-//        }else {
-//            logger.warn("Trainee with username {} not found. No deletion performed");
-//            return false;
-//        }
-        return true;
+        Trainee trainee = traineeRepository.findByUsername(username).orElse(null);
+        if(trainee != null){
+            traineeRepository.delete(trainee);
+            logger.info("Trainee with username {} succesfully deleted", username);
+            return true;
+        }else {
+            logger.warn("Trainee with username {} not found. No deletion performed");
+            return false;
+        }
     }
 
     public Optional<Trainee> selectTraineeProfile(Long id) {

@@ -16,7 +16,7 @@ public class TrainerController {
     }
 
     @GetMapping("/{username}")
-    public Optional<Trainer> getTrainerByName(@PathVariable String username){
+    public Optional<Trainer> getTrainerByUsername(@PathVariable String username){
         return trainerService.findTrainerByUsername(username);
     }
 
@@ -24,5 +24,7 @@ public class TrainerController {
     public Trainer createTrainer(@RequestBody Trainer trainer){
         return trainerService.createTrainerProfile(trainer);
     }
+
+
 
 }

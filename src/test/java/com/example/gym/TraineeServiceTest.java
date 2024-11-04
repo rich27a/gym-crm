@@ -69,7 +69,7 @@ public class TraineeServiceTest {
     public void testFindTraineeByUsername(){
         String username = "John.Doe";
         trainee.setUsername("John.Doe");
-//        when(traineeRepository.findByUsername(username)).thenReturn(Optional.of(trainee));
+        when(traineeRepository.findByUsername(username)).thenReturn(Optional.of(trainee));
         Optional<Trainee> traineeOptional = traineeService.findTraineeByUsername(username);
         assertEquals(traineeOptional.get().getUsername(), "John.Doe");
     }
@@ -79,7 +79,7 @@ public class TraineeServiceTest {
     public void testFindTraineeByUsernameNotFound(){
         String username = "John.Rax";
         trainee.setUsername("John.Doe");
-//        when(traineeRepository.findByUsername(username)).thenReturn(Optional.empty());
+        when(traineeRepository.findByUsername(username)).thenReturn(Optional.empty());
         Optional<Trainee> traineeOptional = traineeService.findTraineeByUsername(username);
         assertTrue(traineeOptional.isEmpty());
     }
