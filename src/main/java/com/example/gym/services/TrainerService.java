@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,15 +36,14 @@ public class TrainerService {
 
     @Transactional
     public Optional<Trainer> updateTrainerProfile(Trainer trainer) {
-        Long id = trainer.getId();
-        logger.info("updating trainee with id: {}", id);
-        Optional<Trainer> trainerOptional = trainerRepository.findById(id);
-        if(trainerOptional.isPresent()){
-            return Optional.of(trainerRepository.save(trainer));
-        }else {
-            logger.warn("trainer with id: {}", id + " not found");
-            return Optional.empty();
-        }
+        return trainerRepository.findById(trainer.getId())
+                .map(existingTrainer -> {
+                    existingTrainer.setFirstName(trainer.getFirstName());
+                    existingTrainer.setLastName(trainer.getLastName());
+                    existingTrainer.setTrainingType(trainer.getTrainingType());
+                    existingTrainer.setUsername(Profile.generateUsername(existingTrainer.getFirstName(), existingTrainer.getLastName()));
+                    return trainerRepository.save(existingTrainer);
+                });
     }
 
     @Transactional
@@ -53,19 +53,22 @@ public class TrainerService {
     }
     @Transactional
     public boolean deleteTrainerByUsername(String username) {
-        logger.info("Trainer with username {} successfully deleted", username);
-        Optional<Trainer> trainer = trainerRepository.findByUsername(username);
-        if(trainer.isPresent()){
-            trainerRepository.delete(trainer.get());
-            return true;
-        }else {
-            logger.warn("Trainer with username {} not found. No deletion performed");
-            return false;
-        }
+        return trainerRepository.findByUsername(username)
+                .map(trainer -> {
+                    trainerRepository.delete(trainer);
+                    logger.info("Trainer with username {} successfully deleted", username);
+                    return true;
+                })
+                .orElse(false);
     }
+
 
 
     public Optional<Trainer> selectTrainerProfile(int id) {
         return Optional.empty();
+    }
+
+    public List<Trainer> getTrainers(){
+        return trainerRepository.findAll();
     }
 }

@@ -1,9 +1,11 @@
 package com.example.gym.controllers;
 
+import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.services.TrainerService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,7 +17,11 @@ public class TrainerController {
         this.trainerService = trainerService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping
+    public List<Trainer> getAll(){
+        return trainerService.getTrainers();
+    }
+    @GetMapping("/search/{username}")
     public Optional<Trainer> getTrainerByUsername(@PathVariable String username){
         return trainerService.findTrainerByUsername(username);
     }
@@ -25,6 +31,15 @@ public class TrainerController {
         return trainerService.createTrainerProfile(trainer);
     }
 
+    @PutMapping
+    public Optional<Trainer> update(@RequestBody Trainer trainer){
+        return trainerService.updateTrainerProfile(trainer);
+    }
 
+
+    @DeleteMapping("/{username}")
+    public boolean delete(@PathVariable String username){
+        return trainerService.deleteTrainerByUsername(username);
+    }
 
 }

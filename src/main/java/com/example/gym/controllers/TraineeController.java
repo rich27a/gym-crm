@@ -36,8 +36,8 @@ public class TraineeController {
         return traineeService.findTraineeByUsername(username);
     }
     @DeleteMapping("/{username}")
-    public void delete(@PathVariable String username){
-        traineeService.deleteTraineeByUsername(username);
+    public boolean delete(@PathVariable String username){
+        return traineeService.deleteTraineeByUsername(username);
     }
 
     @GetMapping("/{id}")

@@ -63,15 +63,13 @@ public class TraineeService {
 
     @Transactional
     public boolean deleteTraineeByUsername(String username) {
-        Trainee trainee = traineeRepository.findByUsername(username).orElse(null);
-        if(trainee != null){
-            traineeRepository.delete(trainee);
-            logger.info("Trainee with username {} succesfully deleted", username);
-            return true;
-        }else {
-            logger.warn("Trainee with username {} not found. No deletion performed");
-            return false;
-        }
+        return traineeRepository.findByUsername(username)
+                .map(trainee -> {
+                    traineeRepository.delete(trainee);
+                    logger.info("Trainee with username {} successfully deleted", username);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public Optional<Trainee> selectTraineeProfile(Long id) {
