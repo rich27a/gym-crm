@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,7 +36,7 @@ public class TraineeService {
     }
 
     @Transactional
-    public Optional<Trainee> findTraineeByUsername(String username){
+    public Trainee findTraineeByUsername(String username){
         logger.info("searching for trainee with username {}", username);
         return traineeRepository.findByUsername(username);
     }
@@ -50,10 +51,9 @@ public class TraineeService {
     @Transactional
     public Optional<Trainee> updateTraineeProfile(Trainee trainee) {
         Long id = trainee.getId();
-        logger.debug("updating trainee with id: {}" , id);
-
         Optional<Trainee> traineeOpt = traineeRepository.findById(id);
         if (traineeOpt.isPresent()) {
+            logger.debug("updating trainee with id: {}" , id);
             return Optional.of(traineeRepository.save(trainee));
         }else {
             logger.warn("trainee with id: " + id + " not found");
@@ -63,19 +63,24 @@ public class TraineeService {
 
     @Transactional
     public boolean deleteTraineeByUsername(String username) {
-        logger.info("Trainee with username {} succesfully deleted", username);
-        Optional<Trainee> trainee = traineeRepository.findByUsername(username);
-        if(trainee.isPresent()){
-            traineeRepository.delete(trainee.get());
-            return true;
-        }else {
-            logger.warn("Trainee with username {} not found. No deletion performed");
-            return false;
-        }
+        Trainee trainee = traineeRepository.findByUsername(username);
+        traineeRepository.delete(trainee);
+//        if(trainee.isPresent()){
+//            traineeRepository.delete(trainee.get());
+//            logger.info("Trainee with username {} succesfully deleted", username);
+//            return true;
+//        }else {
+//            logger.warn("Trainee with username {} not found. No deletion performed");
+//            return false;
+//        }
+        return true;
     }
 
     public Optional<Trainee> selectTraineeProfile(Long id) {
         return traineeRepository.findById(id);
+    }
+    public List<Trainee> getTrainees(){
+        return traineeRepository.findAll();
     }
 
 

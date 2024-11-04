@@ -1,7 +1,5 @@
 package com.example.gym.facade;
 
-import com.example.gym.dtos.TraineeUserDTO;
-import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;

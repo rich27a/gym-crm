@@ -24,7 +24,18 @@ public class TraineeController {
     }
     @GetMapping
     public List<Trainee> getAllTrainees(){
-        return new ArrayList<>();
+        return traineeService.getTrainees();
+    }
+
+    @GetMapping("/search/{username}")
+    public Trainee getTraineeByUsername(@PathVariable("username") String username){
+        System.out.println("searching trainee with username: " + username);
+        return traineeService.findTraineeByUsername(username);
+    }
+    @DeleteMapping("/{username}")
+    public void saveUpdate(@PathVariable String username){
+        System.out.println("deleting trainee with username: " + username);
+        traineeService.deleteTraineeByUsername(username);
     }
 
     @GetMapping("/{id}")
