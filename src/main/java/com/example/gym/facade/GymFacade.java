@@ -28,8 +28,8 @@ public class GymFacade {
         return trainerService.createTrainerProfile(trainer);
     }
 
-    public Optional<Trainer> updateTrainer(int id, String firstName, String lastName, Specialization specialization) {
-        return trainerService.updateTrainerProfile(id, firstName, lastName, specialization);
+    public Optional<Trainer> updateTrainer(Trainer trainer) {
+        return trainerService.updateTrainerProfile(trainer);
     }
 
     public Optional<Trainer> getTrainer(int id) {

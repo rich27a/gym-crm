@@ -1,17 +1,15 @@
 package com.example.gym.services;
 
-import com.example.gym.dao.TrainerDAO;
-import com.example.gym.models.Specialization;
+import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.utils.Profile;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class TrainerService {
@@ -23,6 +21,7 @@ public class TrainerService {
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
 
+    @Transactional
     public Trainer createTrainerProfile(Trainer trainer) {
         logger.info("starting createTraineeProfile...");
         String username = Profile.generateUsername(trainer.getFirstName(),trainer.getLastName());
@@ -34,8 +33,35 @@ public class TrainerService {
         return trainerRepository.save(trainer);
     }
 
-    public Optional<Trainer> updateTrainerProfile(int id, String firstName, String lastName, Specialization specialization) {
-        return Optional.empty();
+    @Transactional
+    public Optional<Trainer> updateTrainerProfile(Trainer trainer) {
+        Long id = trainer.getId();
+        logger.info("updating trainee with id: {}", id);
+        Optional<Trainer> trainerOptional = trainerRepository.findById(id);
+        if(trainerOptional.isPresent()){
+            return Optional.of(trainerRepository.save(trainer));
+        }else {
+            logger.warn("trainer with id: {}", id + " not found");
+            return Optional.empty();
+        }
+    }
+
+    @Transactional
+    public Optional<Trainer> findTrainerByUsername(String username){
+        logger.info("searching for trainer with username {}", username);
+        return trainerRepository.findByUsername(username);
+    }
+    @Transactional
+    public boolean deleteTrainerByUsername(String username) {
+        logger.info("Trainer with username {} successfully deleted", username);
+        Optional<Trainer> trainer = trainerRepository.findByUsername(username);
+        if(trainer.isPresent()){
+            trainerRepository.delete(trainer.get());
+            return true;
+        }else {
+            logger.warn("Trainer with username {} not found. No deletion performed");
+            return false;
+        }
     }
 
 

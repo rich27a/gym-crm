@@ -50,9 +50,10 @@ public class TraineeService {
     @Transactional
     public Optional<Trainee> updateTraineeProfile(Trainee trainee) {
         Long id = trainee.getId();
+        logger.debug("updating trainee with id: {}" , id);
+
         Optional<Trainee> traineeOpt = traineeRepository.findById(id);
         if (traineeOpt.isPresent()) {
-            logger.debug("trainee with id: {}" , id + " successfully updated");
             return Optional.of(traineeRepository.save(trainee));
         }else {
             logger.warn("trainee with id: " + id + " not found");
@@ -62,10 +63,10 @@ public class TraineeService {
 
     @Transactional
     public boolean deleteTraineeByUsername(String username) {
+        logger.info("Trainee with username {} succesfully deleted", username);
         Optional<Trainee> trainee = traineeRepository.findByUsername(username);
         if(trainee.isPresent()){
             traineeRepository.delete(trainee.get());
-            logger.info("Trainee with username {} succesfully deleted", username);
             return true;
         }else {
             logger.warn("Trainee with username {} not found. No deletion performed");
