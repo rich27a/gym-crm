@@ -13,11 +13,11 @@ public class Training{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Trainee trainee;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Trainer trainer;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    private Trainee trainee;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    private Trainer trainer;
 
     @Column(name = "training_name", nullable = false)
     private String name;
@@ -36,8 +36,8 @@ public class Training{
 
     public Training(Long id, Trainee trainee, Trainer trainer, String name, TrainingType trainingType, LocalDate trainingDate, Integer trainingDuration) {
         this.id = id;
-        this.trainee = trainee;
-        this.trainer = trainer;
+//        this.trainee = trainee;
+//        this.trainer = trainer;
         this.name = name;
         this.trainingType = trainingType;
         this.trainingDate = trainingDate;
@@ -52,21 +52,21 @@ public class Training{
         this.id = id;
     }
 
-    public Trainee getTrainee() {
-        return trainee;
-    }
-
-    public void setTrainee(Trainee trainee) {
-        this.trainee = trainee;
-    }
-
-    public Trainer getTrainer() {
-        return trainer;
-    }
-
-    public void setTrainer(Trainer trainer) {
-        this.trainer = trainer;
-    }
+//    public Trainee getTrainee() {
+//        return trainee;
+//    }
+//
+//    public void setTrainee(Trainee trainee) {
+//        this.trainee = trainee;
+//    }
+//
+//    public Trainer getTrainer() {
+//        return trainer;
+//    }
+//
+//    public void setTrainer(Trainer trainer) {
+//        this.trainer = trainer;
+//    }
 
     public String getName() {
         return name;

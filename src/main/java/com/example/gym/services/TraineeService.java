@@ -82,7 +82,7 @@ public class TraineeService {
                         .filter(training ->
                                 (fromDate == null || !training.getTrainingDate().isBefore(fromDate)) &&
                                         (toDate == null || !training.getTrainingDate().isAfter(toDate)) &&
-                                        (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
+//                                        (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
                                         (trainingType == null || training.getTrainingType() == trainingType)
                         )
                         .collect(Collectors.toList())
