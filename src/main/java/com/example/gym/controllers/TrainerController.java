@@ -1,6 +1,5 @@
 package com.example.gym.controllers;
 
-import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.services.TrainerService;
 import org.springframework.web.bind.annotation.*;

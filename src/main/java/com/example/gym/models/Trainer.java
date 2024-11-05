@@ -1,5 +1,6 @@
 package com.example.gym.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,8 +18,15 @@ public class Trainer extends User{
     @ManyToOne(fetch = FetchType.LAZY)
     private TrainingType trainingType;
 
+    @Column
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "trainer_user_id")
+    @JsonManagedReference
+    private List<Training> trainingList = new ArrayList<>();
+
     @ManyToMany(mappedBy = "trainers")
     private List<Trainee> traineeList = new ArrayList<>();
+
 
 //    @OneToOne
 //    @JoinColumn(name = "user_id")

@@ -4,5 +4,6 @@ public enum Specialization {
     CARDIO,
     STRENGTH_TRAINING,
     YOGA,
-    CROSSFIT
+    CROSSFIT,
+    HIIT
 }

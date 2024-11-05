@@ -2,6 +2,7 @@ package com.example.gym.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Trainee extends User{
     @Column
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "trainee_user_id")
+    @JsonManagedReference
     private List<Training> trainingList = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST)

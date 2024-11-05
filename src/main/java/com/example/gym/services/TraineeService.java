@@ -1,5 +1,6 @@
 package com.example.gym.services;
 
+import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Training;
 import com.example.gym.models.TrainingType;
@@ -76,14 +77,15 @@ public class TraineeService {
                 .orElse(false);
     }
 
-    public List<Training> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, TrainingType trainingType) {
+    public List<Training> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, Specialization trainingType) {
         return traineeRepository.findByUsername(username)
                 .map(trainee -> trainee.getTrainingList().stream()
                         .filter(training ->
+
                                 (fromDate == null || !training.getTrainingDate().isBefore(fromDate)) &&
                                         (toDate == null || !training.getTrainingDate().isAfter(toDate)) &&
-//                                        (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
-                                        (trainingType == null || training.getTrainingType() == trainingType)
+                                        (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
+                                        (trainingType == null || training.getTrainingType().getTrainingType().equals(trainingType))
                         )
                         .collect(Collectors.toList())
                 )

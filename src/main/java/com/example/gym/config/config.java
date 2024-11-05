@@ -17,10 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.properties")
 public class config {
     private static final Logger logger = LoggerFactory.getLogger(config.class);
-    @Value("${data.path}")
+//    @Value("${data.path}")
     private String dataPath;
 
     @Bean
@@ -40,7 +40,7 @@ public class config {
 
 
 
-    @Bean
+//    @Bean
     public InitializingBean initializingBeans(Map<Integer, Trainer> trainerMap, Map<Integer, Trainee> traineeMap, Map<Integer, Training> trainingMap){
         return () -> {
             try {

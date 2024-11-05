@@ -14,12 +14,13 @@ public class TrainingType {
     private Long id;
 
     @Column(nullable = false)
-    private String trainingType;
+    @Enumerated(EnumType.STRING)
+    private Specialization trainingType;
 
     public TrainingType() {
     }
 
-    public TrainingType(Long id, String trainingType) {
+    public TrainingType(Long id, Specialization trainingType) {
         this.id = id;
         this.trainingType = trainingType;
     }
@@ -32,11 +33,11 @@ public class TrainingType {
         this.id = id;
     }
 
-    public String getTrainingType() {
+    public Specialization getTrainingType() {
         return trainingType;
     }
 
-    public void setTrainingType(String trainingType) {
+    public void setTrainingType(Specialization trainingType) {
         this.trainingType = trainingType;
     }
 
