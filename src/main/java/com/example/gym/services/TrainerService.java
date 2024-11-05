@@ -1,7 +1,9 @@
 package com.example.gym.services;
 
+import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
+import com.example.gym.models.Training;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
@@ -9,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainerService {
@@ -60,6 +64,19 @@ public class TrainerService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    public List<Training> getTrainerTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String traineeName) {
+        return trainerRepository.findByUsername(username)
+                .map(trainee -> trainee.getTrainingList().stream()
+                        .filter(training ->
+                                (fromDate == null || !training.getTrainingDate().isBefore(fromDate)) &&
+                                        (toDate == null || !training.getTrainingDate().isAfter(toDate)) &&
+                                        (traineeName == null || training.getTrainee().getUsername().equals(traineeName))
+                        )
+                        .collect(Collectors.toList())
+                )
+                .orElseThrow(() -> new RuntimeException("Trainer not found with username: " + username));
     }
 
 

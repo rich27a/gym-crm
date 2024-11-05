@@ -24,9 +24,15 @@ public class Trainer extends User{
     @JsonManagedReference
     private List<Training> trainingList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "trainers")
-    private List<Trainee> traineeList = new ArrayList<>();
+//    @ManyToMany(mappedBy = "trainers")
+//    private List<Trainee> traineeList = new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "trainee_trainer",
+            joinColumns = @JoinColumn(name = "trainer_id"),
+            inverseJoinColumns = @JoinColumn(name = "trainee_id")
+    )
+    private List<Trainer> trainees = new ArrayList<>();
 
 //    @OneToOne
 //    @JoinColumn(name = "user_id")
@@ -57,7 +63,22 @@ public class Trainer extends User{
         this.trainingType = trainingType;
     }
 
-//    public User getUser() {
+    public List<Training> getTrainingList() {
+        return trainingList;
+    }
+
+    public void setTrainingList(List<Training> trainingList) {
+        this.trainingList = trainingList;
+    }
+
+    public List<Trainer> getTrainees() {
+        return trainees;
+    }
+
+    public void setTrainees(List<Trainer> trainees) {
+        this.trainees = trainees;
+    }
+    //    public User getUser() {
 //        return user;
 //    }
 //

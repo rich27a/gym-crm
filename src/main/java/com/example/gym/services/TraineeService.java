@@ -3,7 +3,6 @@ package com.example.gym.services;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Training;
-import com.example.gym.models.TrainingType;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
