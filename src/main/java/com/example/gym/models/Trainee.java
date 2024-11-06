@@ -1,7 +1,5 @@
 package com.example.gym.models;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -35,18 +33,14 @@ public class Trainee extends User{
     private List<Trainer> trainers = new ArrayList<>();
 
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+
 
     public Trainee() {
     }
 
     public Trainee(Date dateOfBirth, String address) {
-//        this.id = id;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
-//        this.user = user;
     }
 
     public Long getId() {
