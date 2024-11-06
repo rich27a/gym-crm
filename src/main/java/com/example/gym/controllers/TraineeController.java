@@ -60,4 +60,11 @@ public class TraineeController {
 
         return traineeService.getTraineeTrainingsByCriteria(username, fromDate, toDate, trainerName, trainingType);
     }
+
+    @PutMapping("/{traineeId}/trainers")
+    public Trainee updateTraineeTrainers(
+            @PathVariable Long traineeId,
+            @RequestBody List<Long> trainerIds) {
+        return traineeService.updateTraineeTrainerList(traineeId, trainerIds);
+    }
 }
