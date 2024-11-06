@@ -79,8 +79,9 @@ public class TrainerService {
                 .orElseThrow(() -> new RuntimeException("Trainer not found with username: " + username));
     }
 
-
-
+    public List<Trainer> findAllByIds(List<Long> trainerIds){
+        return trainerRepository.findAllById(trainerIds);
+    }
     public Optional<Trainer> selectTrainerProfile(int id) {
         return Optional.empty();
     }

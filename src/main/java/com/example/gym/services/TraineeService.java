@@ -2,9 +2,11 @@ package com.example.gym.services;
 
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
+import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.utils.Profile;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +21,11 @@ import java.util.stream.Collectors;
 public class TraineeService {
 
     private final TraineeRepository traineeRepository;
+    private final TrainerService trainerService;
 
-    public TraineeService(TraineeRepository traineeRepository) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService) {
         this.traineeRepository = traineeRepository;
+        this.trainerService = trainerService;
     }
 
 
@@ -89,6 +93,14 @@ public class TraineeService {
                         .collect(Collectors.toList())
                 )
                 .orElseThrow(() -> new RuntimeException("Trainee not found with username: " + username));
+    }
+    @Transactional
+    public Trainee updateTraineeTrainerList(Long traineeId, List<Long> trainersIds){
+        Trainee trainee = traineeRepository.findById(traineeId)
+                .orElseThrow(() -> new EntityNotFoundException("Trainee not found"));
+        List<Trainer> trainers = trainerService.findAllByIds(trainersIds);
+
+        return traineeRepository.save(trainee);
     }
 
     public Optional<Trainee> selectTraineeProfile(Long id) {
