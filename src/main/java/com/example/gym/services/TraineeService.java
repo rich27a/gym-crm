@@ -102,6 +102,10 @@ public class TraineeService {
         return traineeRepository.save(trainee);
     }
 
+    public List<Trainer> getUnassignedTrainers(String traineeUsername) {
+        return trainerService.getUnassignedTrainersFromTraineeUsername(traineeUsername);
+    }
+
     public Optional<Trainee> selectTraineeProfile(Long id) {
         return traineeRepository.findById(id);
     }

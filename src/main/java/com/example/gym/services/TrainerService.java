@@ -1,7 +1,5 @@
 package com.example.gym.services;
 
-import com.example.gym.models.Specialization;
-import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.repositories.TrainerRepository;
@@ -77,6 +75,10 @@ public class TrainerService {
                         .collect(Collectors.toList())
                 )
                 .orElseThrow(() -> new RuntimeException("Trainer not found with username: " + username));
+    }
+
+    public List<Trainer> getUnassignedTrainersFromTraineeUsername(String traineeUsername) {
+        return trainerRepository.findTrainersNotAssignedToTrainee(traineeUsername);
     }
 
     public List<Trainer> findAllByIds(List<Long> trainerIds){

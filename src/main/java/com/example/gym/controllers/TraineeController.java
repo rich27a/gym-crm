@@ -1,9 +1,6 @@
 package com.example.gym.controllers;
 
-import com.example.gym.models.Specialization;
-import com.example.gym.models.Trainee;
-import com.example.gym.models.Training;
-import com.example.gym.models.TrainingType;
+import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -66,5 +63,10 @@ public class TraineeController {
             @PathVariable Long traineeId,
             @RequestBody List<Long> trainerIds) {
         return traineeService.updateTraineeTrainerList(traineeId, trainerIds);
+    }
+
+    @GetMapping("/{username}/unassigned-trainers")
+    public List<Trainer> getUnassignedTrainers(@PathVariable String username) {
+        return traineeService.getUnassignedTrainers(username);
     }
 }
