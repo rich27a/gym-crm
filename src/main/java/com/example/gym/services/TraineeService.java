@@ -98,8 +98,7 @@ public class TraineeService {
     public Trainee updateTraineeTrainerList(Long traineeId, List<Long> trainersIds){
         Trainee trainee = traineeRepository.findById(traineeId)
                 .orElseThrow(() -> new EntityNotFoundException("Trainee not found"));
-        List<Trainer> trainers = trainerService.findAllByIds(trainersIds);
-
+        trainee.setTrainerList(trainerService.findAllByIds(trainersIds));
         return traineeRepository.save(trainee);
     }
 

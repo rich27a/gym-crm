@@ -1,6 +1,6 @@
 package com.example.gym.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ public class Trainer extends User{
     private List<Training> trainingList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "trainers")
+    @JsonIgnore
     private List<Trainee> trainees = new ArrayList<>();
 
 
