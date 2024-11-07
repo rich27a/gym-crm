@@ -64,6 +64,8 @@ public class TraineeController {
             @RequestBody List<Long> trainerIds) {
         return traineeService.updateTraineeTrainerList(traineeId, trainerIds);
     }
+//    @PutMapping("/{username}/change-password")
+//    public
 
     @GetMapping("/{username}/unassigned-trainers")
     public List<Trainer> getUnassignedTrainers(@PathVariable String username) {
