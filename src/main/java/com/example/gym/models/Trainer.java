@@ -2,6 +2,7 @@ package com.example.gym.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,9 @@ public class Trainer extends User{
     @Column(name = "trainer_id")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotBlank
     private TrainingType trainingType;
-
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "trainer_user_id")

@@ -5,6 +5,7 @@ import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.services.TrainerService;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,12 +32,12 @@ public class TrainerController {
     }
 
     @PostMapping
-    public Trainer createTrainer(@RequestBody Trainer trainer){
+    public Trainer createTrainer(@Valid @RequestBody Trainer trainer){
         return trainerService.createTrainerProfile(trainer);
     }
 
     @PutMapping
-    public Optional<Trainer> update(@RequestBody Trainer trainer){
+    public Optional<Trainer> update(@Valid @RequestBody Trainer trainer){
         return trainerService.updateTrainerProfile(trainer);
     }
 

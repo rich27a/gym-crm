@@ -3,6 +3,7 @@ package com.example.gym.controllers;
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +22,12 @@ public class TraineeController {
     }
 
     @PostMapping
-    public Trainee save(@RequestBody Trainee trainee){
+    public Trainee save(@Valid @RequestBody Trainee trainee){
         return traineeService.createTraineeProfile(trainee);
     }
 
     @PutMapping
-    public Optional<Trainee> update(@RequestBody Trainee trainee){
+    public Optional<Trainee> update(@Valid @RequestBody Trainee trainee){
         return traineeService.updateTraineeProfile(trainee);
     }
     @GetMapping

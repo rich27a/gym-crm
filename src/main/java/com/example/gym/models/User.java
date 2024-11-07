@@ -2,6 +2,7 @@ package com.example.gym.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -12,8 +13,10 @@ public class User {
     @Column(name = "user_id")
     private Long id;
     @Column(nullable = false)
+    @NotBlank
     private String firstName;
     @Column(nullable = false)
+    @NotBlank
     private String lastName;
     @Column(nullable = false)
     private String username;
