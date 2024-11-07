@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "trainees")
 public class Trainee extends User{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trainee_id")
     private Long id;
     @Column
