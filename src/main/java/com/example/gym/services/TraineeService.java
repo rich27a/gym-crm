@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,11 +23,14 @@ public class TraineeService {
 
     private final TraineeRepository traineeRepository;
     private final TrainerService trainerService;
+    private final PasswordEncoder passwordEncoder;
 
-    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder) {
         this.traineeRepository = traineeRepository;
         this.trainerService = trainerService;
+        this.passwordEncoder = passwordEncoder;
     }
+
 
 
     private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
@@ -80,6 +84,7 @@ public class TraineeService {
                 .orElse(false);
     }
 
+    @Transactional
     public List<Training> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, Specialization trainingType) {
         return traineeRepository.findByUsername(username)
                 .map(trainee -> trainee.getTrainingList().stream()
@@ -102,13 +107,30 @@ public class TraineeService {
         return traineeRepository.save(trainee);
     }
 
+    @Transactional
     public List<Trainer> getUnassignedTrainers(String traineeUsername) {
         return trainerService.getUnassignedTrainersFromTraineeUsername(traineeUsername);
     }
+    @Transactional
+    public Boolean changePassword(String username, String newPassword, String oldPassword){
+        return traineeRepository.findByUsername(username).map(
+                trainee -> {
+                    if (passwordEncoder.matches(oldPassword, trainee.getPassword())) {
+                        trainee.setPassword(passwordEncoder.encode(newPassword));
+                        traineeRepository.save(trainee);
+                        return true;
+                    }else {
+                        return false;
+                    }
+                }
+        ).orElseGet(() -> false);
+    }
 
+    @Transactional
     public Optional<Trainee> selectTraineeProfile(Long id) {
         return traineeRepository.findById(id);
     }
+    @Transactional
     public List<Trainee> getTrainees(){
         return traineeRepository.findAll();
     }

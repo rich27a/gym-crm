@@ -1,5 +1,6 @@
 package com.example.gym.controllers;
 
+import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -64,8 +65,12 @@ public class TraineeController {
             @RequestBody List<Long> trainerIds) {
         return traineeService.updateTraineeTrainerList(traineeId, trainerIds);
     }
-//    @PutMapping("/{username}/change-password")
-//    public
+    @PutMapping("/{username}/change-password")
+    public Boolean updatePassword(@PathVariable String username,
+                                  @RequestBody PasswordChangeDto passwordChangeDto
+                                  ){
+        return traineeService.changePassword(username, passwordChangeDto.getNewPassword(), passwordChangeDto.getOldPassword());
+    }
 
     @GetMapping("/{username}/unassigned-trainers")
     public List<Trainer> getUnassignedTrainers(@PathVariable String username) {
