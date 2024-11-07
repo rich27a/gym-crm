@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -125,11 +127,20 @@ public class TraineeService {
                 }
         ).orElseGet(() -> false);
     }
+    @Transactional
+    public void activate(Long id){
+        traineeRepository.findById(id)
+                .map(trainer -> {
+                    trainer.setActive(!trainer.isActive());
+                    return traineeRepository.save(trainer);
+                }).orElseThrow(() -> new RuntimeException("Trainer not found"));
+    }
 
     @Transactional
     public Optional<Trainee> selectTraineeProfile(Long id) {
         return traineeRepository.findById(id);
     }
+
     @Transactional
     public List<Trainee> getTrainees(){
         return traineeRepository.findAll();

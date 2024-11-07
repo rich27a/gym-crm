@@ -72,8 +72,13 @@ public class TraineeController {
         return traineeService.changePassword(username, passwordChangeDto.getNewPassword(), passwordChangeDto.getOldPassword());
     }
 
+
     @GetMapping("/{username}/unassigned-trainers")
     public List<Trainer> getUnassignedTrainers(@PathVariable String username) {
         return traineeService.getUnassignedTrainers(username);
+    }
+    @PutMapping("/{id}/activate")
+    public void activateDeactivate(@PathVariable Long id){
+        traineeService.activate(id);
     }
 }

@@ -60,4 +60,8 @@ public class TrainerController {
     ){
         return trainerService.changePassword(username, passwordChangeDto.getNewPassword(), passwordChangeDto.getOldPassword());
     }
+    @PutMapping("/{id}/activate")
+    public void activateDeactivate(@PathVariable Long id){
+        trainerService.activate(id);
+    }
 }

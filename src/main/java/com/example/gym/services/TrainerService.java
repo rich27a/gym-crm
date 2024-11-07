@@ -99,6 +99,14 @@ public class TrainerService {
                 }
         ).orElseGet(() -> false);
     }
+    @Transactional
+    public void activate(Long id){
+        trainerRepository.findById(id)
+                .map(trainer -> {
+                    trainer.setActive(!trainer.isActive());
+                    return trainerRepository.save(trainer);
+                }).orElseThrow(() -> new RuntimeException("Trainer not found"));
+    }
 
     @Transactional
     public List<Trainer> findAllByIds(List<Long> trainerIds){
