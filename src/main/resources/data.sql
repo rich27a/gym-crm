@@ -1,7 +1,7 @@
-INSERT INTO users(user_id, first_name, last_name, password, username, is_active) VALUES(1, 'John', 'Doe', '123456789', 'John.Doe', true);
-INSERT INTO users(user_id, first_name, last_name, password, username, is_active) VALUES(2, 'John', 'Doe', '123456789', 'John.Doe2', true);
-INSERT INTO users(user_id, first_name, last_name, password, username, is_active) VALUES(3, 'John', 'Doe', '123456789', 'John.Doe3', true);
-INSERT INTO users(user_id, first_name, last_name, password, username, is_active) VALUES(4, 'John', 'Doe', '123456789', 'John.Doe4', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainer', '123456789', 'John.Trainer', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainer', '123456789', 'John.Trainer2', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '123456789', 'John.Trainee', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '123456789', 'John.Trainee2', true);
 
 INSERT INTO trainers(user_id) VALUES(1);
 INSERT INTO trainers(user_id) VALUES(2);
@@ -16,7 +16,7 @@ VALUES(1, 3, 1, 'Fit me', 1, '2024-06-06', 60);
 INSERT INTO trainings(training_id, trainee_user_id, trainer_user_id, training_name, training_type_id, training_date, training_duration)
 VALUES(2, 3, 2, 'Fit me 2.0', 1, '2024-06-07', 60);
 
-INSERT INTO trainee_trainer(trainee_id, trainer_id) VALUES(3, 1);
-INSERT INTO trainee_trainer(trainee_id, trainer_id) VALUES(3, 2);
+INSERT INTO trainee_trainer(trainee_id, trainer_id) VALUES(3,1);
+INSERT INTO trainee_trainer(trainee_id, trainer_id) VALUES(3,2);
 
 
