@@ -10,7 +10,7 @@ import java.util.List;
 public class TrainingType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -23,6 +23,11 @@ public class TrainingType {
     public TrainingType(Long id, Specialization trainingType) {
         this.id = id;
         this.trainingType = trainingType;
+    }
+    public static TrainingType fromString(String type) {
+        TrainingType trainingType = new TrainingType();
+        trainingType.setTrainingType(Specialization.fromString(type));
+        return trainingType;
     }
 
     public Long getId() {

@@ -3,8 +3,8 @@ INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('
 INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '123456789', 'John.Trainee', true);
 INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '123456789', 'John.Trainee2', true);
 
-INSERT INTO training_types(id, training_type) VALUES(1, 'CARDIO');
-INSERT INTO training_types(id, training_type) VALUES(2, 'YOGA');
+INSERT INTO training_types( training_type) VALUES( 'CARDIO');
+INSERT INTO training_types( training_type) VALUES( 'YOGA');
 
 INSERT INTO trainers(user_id, training_type_id) VALUES(1, 1);
 INSERT INTO trainers(user_id, training_type_id) VALUES(2, 2);
