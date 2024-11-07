@@ -1,5 +1,6 @@
 package com.example.gym.controllers;
 
+import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
@@ -52,5 +53,11 @@ public class TrainerController {
             @RequestParam(required = false) String traineeName) {
 
         return trainerService.getTrainerTrainingsByCriteria(username, fromDate, toDate, traineeName);
+    }
+    @PutMapping("/{username}/change-password")
+    public Boolean updatePassword(@PathVariable String username,
+                                  @RequestBody PasswordChangeDto passwordChangeDto
+    ){
+        return trainerService.changePassword(username, passwordChangeDto.getNewPassword(), passwordChangeDto.getOldPassword());
     }
 }

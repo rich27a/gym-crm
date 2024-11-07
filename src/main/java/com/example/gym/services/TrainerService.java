@@ -7,6 +7,7 @@ import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class TrainerService {
     private final TrainerRepository trainerRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public TrainerService(TrainerRepository trainerRepository) {
+    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder) {
         this.trainerRepository = trainerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
@@ -64,6 +67,7 @@ public class TrainerService {
                 .orElse(false);
     }
 
+    @Transactional
     public List<Training> getTrainerTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String traineeName) {
         return trainerRepository.findByUsername(username)
                 .map(trainee -> trainee.getTrainingList().stream()
@@ -77,17 +81,35 @@ public class TrainerService {
                 .orElseThrow(() -> new RuntimeException("Trainer not found with username: " + username));
     }
 
+    @Transactional
     public List<Trainer> getUnassignedTrainersFromTraineeUsername(String traineeUsername) {
         return trainerRepository.findTrainersNotAssignedToTrainee(traineeUsername);
     }
+    @Transactional
+    public Boolean changePassword(String username, String newPassword, String oldPassword){
+        return trainerRepository.findByUsername(username).map(
+                trainee -> {
+                    if (passwordEncoder.matches(oldPassword, trainee.getPassword())) {
+                        trainee.setPassword(passwordEncoder.encode(newPassword));
+                        trainerRepository.save(trainee);
+                        return true;
+                    }else {
+                        return false;
+                    }
+                }
+        ).orElseGet(() -> false);
+    }
 
+    @Transactional
     public List<Trainer> findAllByIds(List<Long> trainerIds){
         return trainerRepository.findAllById(trainerIds);
     }
+    @Transactional
     public Optional<Trainer> selectTrainerProfile(int id) {
         return Optional.empty();
     }
 
+    @Transactional
     public List<Trainer> getTrainers(){
         return trainerRepository.findAll();
     }
