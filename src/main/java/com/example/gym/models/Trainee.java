@@ -22,10 +22,9 @@ public class Trainee extends User{
     @Column
     private String address;
 
-    @Column
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "trainee_user_id")
-    @JsonManagedReference
     private List<Training> trainingList = new ArrayList<>();
 
     @ManyToMany
