@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -64,6 +62,7 @@ public class TraineeService {
 
     @Transactional
     public Optional<Trainee> updateTraineeProfile(Trainee trainee) {
+        logger.info("searching trainee with id {}", trainee.getId());
         return traineeRepository.findById(trainee.getId())
                 .map(existingTrainee -> {
                     existingTrainee.setFirstName(trainee.getFirstName());
@@ -77,6 +76,8 @@ public class TraineeService {
 
     @Transactional
     public boolean deleteTraineeByUsername(String username) {
+        logger.info("searching trainee with username: {}", username);
+
         return traineeRepository.findByUsername(username)
                 .map(trainee -> {
                     traineeRepository.delete(trainee);
@@ -88,10 +89,11 @@ public class TraineeService {
 
     @Transactional
     public List<Training> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, Specialization trainingType) {
+        logger.info("searching trainee with username: {}", username);
+
         return traineeRepository.findByUsername(username)
                 .map(trainee -> trainee.getTrainingList().stream()
                         .filter(training ->
-
                                 (fromDate == null || !training.getTrainingDate().isBefore(fromDate)) &&
                                         (toDate == null || !training.getTrainingDate().isAfter(toDate)) &&
                                         (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
@@ -103,6 +105,7 @@ public class TraineeService {
     }
     @Transactional
     public Trainee updateTraineeTrainerList(Long traineeId, List<Long> trainersIds){
+        logger.info("updating trainee with id: {}", traineeId);
         Trainee trainee = traineeRepository.findById(traineeId)
                 .orElseThrow(() -> new EntityNotFoundException("Trainee not found"));
         trainee.setTrainerList(trainerService.findAllByIds(trainersIds));
@@ -111,10 +114,12 @@ public class TraineeService {
 
     @Transactional
     public List<Trainer> getUnassignedTrainers(String traineeUsername) {
+        logger.info("searching trainee with username: {}", traineeUsername);
         return trainerService.getUnassignedTrainersFromTraineeUsername(traineeUsername);
     }
     @Transactional
     public Boolean changePassword(String username, String newPassword, String oldPassword){
+        logger.info("updating trainee with username: {}", username);
         return traineeRepository.findByUsername(username).map(
                 trainee -> {
                     if (passwordEncoder.matches(oldPassword, trainee.getPassword())) {
@@ -129,6 +134,7 @@ public class TraineeService {
     }
     @Transactional
     public void activate(Long id){
+        logger.info("updating trainee with id: {}", id);
         traineeRepository.findById(id)
                 .map(trainer -> {
                     trainer.setActive(!trainer.isActive());
@@ -138,11 +144,13 @@ public class TraineeService {
 
     @Transactional
     public Optional<Trainee> selectTraineeProfile(Long id) {
+        logger.info("searching trainee with id: {}", id);
         return traineeRepository.findById(id);
     }
 
     @Transactional
     public List<Trainee> getTrainees(){
+        logger.info("searching all trainees");
         return traineeRepository.findAll();
     }
 

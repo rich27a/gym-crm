@@ -30,7 +30,7 @@ public class GymFacade {
         return trainerService.updateTrainerProfile(trainer);
     }
 
-    public Optional<Trainer> getTrainer(int id) {
+    public Optional<Trainer> getTrainer(Long id) {
         return trainerService.selectTrainerProfile(id);
     }
 

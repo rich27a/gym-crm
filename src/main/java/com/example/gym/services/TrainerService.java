@@ -41,6 +41,7 @@ public class TrainerService {
 
     @Transactional
     public Optional<Trainer> updateTrainerProfile(Trainer trainer) {
+        logger.info("searching trainer with id: {}", trainer.getId());
         return trainerRepository.findById(trainer.getId())
                 .map(existingTrainer -> {
                     existingTrainer.setFirstName(trainer.getFirstName());
@@ -58,6 +59,8 @@ public class TrainerService {
     }
     @Transactional
     public boolean deleteTrainerByUsername(String username) {
+        logger.info("searching trainer with username: {}", username);
+
         return trainerRepository.findByUsername(username)
                 .map(trainer -> {
                     trainerRepository.delete(trainer);
@@ -69,6 +72,7 @@ public class TrainerService {
 
     @Transactional
     public List<Training> getTrainerTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String traineeName) {
+        logger.info("searching trainer with username: {}", username);
         return trainerRepository.findByUsername(username)
                 .map(trainee -> trainee.getTrainingList().stream()
                         .filter(training ->
@@ -83,10 +87,14 @@ public class TrainerService {
 
     @Transactional
     public List<Trainer> getUnassignedTrainersFromTraineeUsername(String traineeUsername) {
+        logger.info("searching unassigned trainee: {}", traineeUsername);
+
         return trainerRepository.findTrainersNotAssignedToTrainee(traineeUsername);
     }
     @Transactional
     public Boolean changePassword(String username, String newPassword, String oldPassword){
+        logger.info("updating trainer with username: {}", username);
+
         return trainerRepository.findByUsername(username).map(
                 trainee -> {
                     if (passwordEncoder.matches(oldPassword, trainee.getPassword())) {
@@ -101,6 +109,7 @@ public class TrainerService {
     }
     @Transactional
     public void activate(Long id){
+        logger.info("updating trainer with id: {}", id);
         trainerRepository.findById(id)
                 .map(trainer -> {
                     trainer.setActive(!trainer.isActive());
@@ -110,15 +119,19 @@ public class TrainerService {
 
     @Transactional
     public List<Trainer> findAllByIds(List<Long> trainerIds){
+        logger.info("searching all trainers by Ids ");
+
         return trainerRepository.findAllById(trainerIds);
     }
     @Transactional
-    public Optional<Trainer> selectTrainerProfile(int id) {
-        return Optional.empty();
+    public Optional<Trainer> selectTrainerProfile(Long id) {
+        logger.info("searching trainer with id: {}", id);
+        return trainerRepository.findById(id);
     }
 
     @Transactional
     public List<Trainer> getTrainers(){
+        logger.info("searching all trainers");
         return trainerRepository.findAll();
     }
 }

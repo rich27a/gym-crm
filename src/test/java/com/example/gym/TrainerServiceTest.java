@@ -50,7 +50,7 @@ public class TrainerServiceTest {
 
         when(trainerRepository.findById(1L)).thenReturn(Optional.of(trainer));
 
-        Optional<Trainer> foundTrainer = trainerService.selectTrainerProfile(1);
+        Optional<Trainer> foundTrainer = trainerService.selectTrainerProfile(1L);
 
         assertTrue(foundTrainer.isPresent());
 //        assertEquals("Juan", foundTrainer.get().getFirstName());
