@@ -85,11 +85,5 @@ public class Trainee extends User{
     public void setTrainerList(List<Trainer> trainerList) {
         this.trainers = trainerList;
     }
-    //    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+
 }
