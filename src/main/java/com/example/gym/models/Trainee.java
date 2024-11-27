@@ -15,14 +15,13 @@ public class Trainee extends User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trainee_id")
     private Long id;
-    @Column
+    @Column(nullable = false)
     @NotNull
     @Past
     private Date dateOfBirth;
-    @Column
+    @Column(nullable = false)
     @NotBlank
     private String address;
-
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "trainee_user_id")

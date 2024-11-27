@@ -5,10 +5,14 @@ import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,8 +26,13 @@ public class TraineeController {
     }
 
     @PostMapping
-    public Trainee save(@Valid @RequestBody Trainee trainee){
-        return traineeService.createTraineeProfile(trainee);
+    public ResponseEntity<Map<String, String>> save(@Valid @RequestBody Trainee trainee){
+        Trainee traineeCreated = traineeService.createTraineeProfile(trainee);
+        URI location = URI.create("/api/trainees/" + traineeCreated.getId());
+        Map<String, String> response = new HashMap<>();
+        response.put("username", traineeCreated.getUsername());
+        response.put("password", traineeCreated.getPassword());
+        return ResponseEntity.created(location).body(response);
     }
 
     @PutMapping
