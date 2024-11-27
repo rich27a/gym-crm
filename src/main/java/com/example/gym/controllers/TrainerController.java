@@ -43,7 +43,7 @@ public class TrainerController {
         Map<String, String> response = new HashMap<>();
         response.put("username", createdTrainer.getUsername());
         response.put("password", createdTrainer.getPassword());
-        
+
         return ResponseEntity.created(location).body(response);
     }
 
