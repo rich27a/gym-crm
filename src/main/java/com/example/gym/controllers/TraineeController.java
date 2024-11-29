@@ -2,6 +2,7 @@ package com.example.gym.controllers;
 
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.dtos.TraineeProfileResponse;
+import com.example.gym.dtos.TraineeProfileUpdateResponseDTO;
 import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
@@ -14,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +42,10 @@ public class TraineeController {
     }
 
     @PutMapping
-    public Optional<Trainee> update(@Valid @RequestBody Trainee trainee){
-        return traineeService.updateTraineeProfile(trainee);
+    public ResponseEntity<TraineeProfileUpdateResponseDTO> update(@Valid @RequestBody Trainee trainee){
+        return traineeService.updateTraineeProfile(trainee)
+                .map(traineeUpdated -> ResponseEntity.ok(TraineeMapper.INSTANCE.toUpdatedResponse(traineeUpdated)))
+                .orElseThrow(()-> new EntityNotFoundException("trainee not found"));
     }
     @GetMapping
     public List<Trainee> getAll(){
@@ -58,25 +59,6 @@ public class TraineeController {
         return traineeService.findTraineeByUsername(username)
                 .map(trainee -> ResponseEntity.ok(TraineeMapper.INSTANCE.toResponse(trainee)))
                 .orElseThrow(() -> new EntityNotFoundException("trainee not found"));
-//        return traineeService.findTraineeByUsername(username)
-//                .map(trainee -> {
-//                    TraineeProfileResponse response = new TraineeProfileResponse(
-//                            trainee.getFirstName(),
-//                            trainee.getLastName(),
-//                            LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(trainee.getDateOfBirth()) ),
-//                            trainee.getAddress(),
-//                            trainee.isActive()
-//                    );
-//                    List<TraineeProfileResponse.TrainerInfo> trainerInfoList = trainee.getTrainerList().stream()
-//                            .map(trainer -> new TraineeProfileResponse.TrainerInfo(
-//                                    trainer.getUsername(),
-//                                    trainer.getFirstName(),
-//                                    trainer.getLastName(),
-//                                    trainer.getTrainingType().toString()
-//                            )).toList();
-//                    response.setTrainers(trainerInfoList);
-//                    return ResponseEntity.ok(response);
-//                }).orElseThrow(() -> new ResourceNotFoundException("Trainee not found"));
     }
 
     @DeleteMapping("/{username}")
