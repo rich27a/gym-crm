@@ -53,9 +53,6 @@ public class TraineeController {
     public List<Trainee> getAll(){
         return traineeService.getTrainees();
     }
-
-
-
     @GetMapping("/{username}")
     public ResponseEntity<TraineeProfileResponse> getByUsername(@PathVariable String username){
         return traineeService.findTraineeByUsername(username)
@@ -64,8 +61,8 @@ public class TraineeController {
     }
 
     @DeleteMapping("/{username}")
-    public boolean delete(@PathVariable String username){
-        return traineeService.deleteTraineeByUsername(username);
+    public ResponseEntity<String> delete(@PathVariable(required = true) String username){
+        return traineeService.deleteTraineeByUsername(username) ? ResponseEntity.ok("trainee deleted successfully") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("trainee not found");
     }
 
     @GetMapping("/{username}/trainings")
