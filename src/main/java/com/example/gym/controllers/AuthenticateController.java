@@ -25,7 +25,10 @@ public class AuthenticateController {
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password or username"));
     }
     @PutMapping("/password")
-    public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChangeDto passwordChangeDto){
-        return ResponseEntity.ok(null);
+    public ResponseEntity<String> changePassword(@Valid @RequestBody PasswordChangeDto passwordChangeDto){
+        return Optional.of(authenticateService.changePassword(passwordChangeDto))
+                .filter(auth -> auth)
+                .map(auth -> ResponseEntity.ok("Password changed"))
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password or username"));
     }
 }
