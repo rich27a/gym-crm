@@ -31,7 +31,6 @@ public class Trainer extends User{
     private List<Trainee> trainees = new ArrayList<>();
 
 
-
     public Trainer() {
     }
 
