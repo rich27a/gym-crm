@@ -26,9 +26,11 @@ import java.util.Optional;
 public class TraineeController {
 
     private final TraineeService traineeService;
+    private final TraineeMapper traineeMapper;
 
-    public TraineeController(TraineeService traineeService) {
+    public TraineeController(TraineeService traineeService, TraineeMapper traineeMapper) {
         this.traineeService = traineeService;
+        this.traineeMapper = traineeMapper;
     }
 
     @PostMapping
@@ -44,7 +46,7 @@ public class TraineeController {
     @PutMapping
     public ResponseEntity<TraineeProfileUpdateResponseDTO> update(@Valid @RequestBody Trainee trainee){
         return traineeService.updateTraineeProfile(trainee)
-                .map(traineeUpdated -> ResponseEntity.ok(TraineeMapper.INSTANCE.toUpdatedResponse(traineeUpdated)))
+                .map(traineeUpdated -> ResponseEntity.ok(traineeMapper.toUpdatedResponse(traineeUpdated)))
                 .orElseThrow(()-> new EntityNotFoundException("trainee not found"));
     }
     @GetMapping
@@ -57,7 +59,7 @@ public class TraineeController {
     @GetMapping("/{username}")
     public ResponseEntity<TraineeProfileResponse> getByUsername(@PathVariable String username){
         return traineeService.findTraineeByUsername(username)
-                .map(trainee -> ResponseEntity.ok(TraineeMapper.INSTANCE.toResponse(trainee)))
+                .map(trainee -> ResponseEntity.ok(traineeMapper.toResponse(trainee)))
                 .orElseThrow(() -> new EntityNotFoundException("trainee not found"));
     }
 

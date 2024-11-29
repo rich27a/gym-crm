@@ -15,7 +15,6 @@ import java.util.Date;
 
 @Mapper(componentModel = "spring")
 public interface TraineeMapper {
-    TraineeMapper INSTANCE = Mappers.getMapper(TraineeMapper.class);
 
     @Mapping(source = "dateOfBirth", target = "dateOfBirth", dateFormat = "yyyy-MM-dd")
     @Mapping(source = "trainerList", target = "trainers")
