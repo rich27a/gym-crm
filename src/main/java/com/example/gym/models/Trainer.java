@@ -27,7 +27,6 @@ public class Trainer extends User{
     private List<Training> trainingList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "trainers")
-    @JsonIgnore
     private List<Trainee> trainees = new ArrayList<>();
 
 

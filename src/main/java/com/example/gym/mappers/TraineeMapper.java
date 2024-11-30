@@ -7,7 +7,6 @@ import com.example.gym.models.Trainer;
 import com.example.gym.models.TrainingType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
