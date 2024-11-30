@@ -1,11 +1,15 @@
 package com.example.gym.controllers;
 
 import com.example.gym.dtos.PasswordChangeDto;
+import com.example.gym.dtos.TrainerProfileResponse;
+import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.services.TrainerService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +25,22 @@ import java.util.Optional;
 @RequestMapping("/api/trainers")
 public class TrainerController {
     private final TrainerService trainerService;
+    private final TrainerMapper trainerMapper;
 
-    public TrainerController(TrainerService trainerService) {
+    public TrainerController(TrainerService trainerService, TrainerMapper trainerMapper) {
         this.trainerService = trainerService;
+        this.trainerMapper = trainerMapper;
     }
 
     @GetMapping
     public List<Trainer> getAll(){
         return trainerService.getTrainers();
     }
-    @GetMapping("/search/{username}")
-    public Optional<Trainer> getTrainerByUsername(@PathVariable String username){
-        return trainerService.findTrainerByUsername(username);
+    @GetMapping("/{username}")
+    public ResponseEntity<TrainerProfileResponse> getTrainerByUsername(@PathVariable String username){
+        return trainerService.findTrainerByUsername(username)
+                .map(trainer -> ResponseEntity.ok(trainerMapper.toResponse(trainer)))
+                .orElseThrow(() -> new ResourceNotFoundException("trainer not found"));
     }
 
     @PostMapping
