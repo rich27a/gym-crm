@@ -2,6 +2,7 @@ package com.example.gym.controllers;
 
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.dtos.TrainerProfileResponse;
+import com.example.gym.dtos.TrainerProfileUpdateResponseDTO;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
@@ -56,8 +57,10 @@ public class TrainerController {
     }
 
     @PutMapping
-    public Optional<Trainer> update(@Valid @RequestBody Trainer trainer){
-        return trainerService.updateTrainerProfile(trainer);
+    public ResponseEntity<TrainerProfileUpdateResponseDTO> update(@Valid @RequestBody Trainer trainer){
+        return trainerService.updateTrainerProfile(trainer)
+                .map(updatedTrainer -> ResponseEntity.ok(trainerMapper.toUpdateResponse(updatedTrainer)))
+                .orElseThrow(() -> new ResourceNotFoundException("Trainer not found"));
     }
 
 
