@@ -1,7 +1,5 @@
 package com.example.gym.dtos;
 
-import com.example.gym.models.Trainee;
-
 import java.util.List;
 
 public class TrainerProfileResponse {
