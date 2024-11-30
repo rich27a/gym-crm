@@ -41,8 +41,8 @@ public class TrainerService {
 
     @Transactional
     public Optional<Trainer> updateTrainerProfile(Trainer trainer) {
-        logger.info("searching trainer with id: {}", trainer.getId());
-        return trainerRepository.findById(trainer.getId())
+        logger.info("searching trainer with username: {}", trainer.getUsername());
+        return trainerRepository.findByUsername(trainer.getUsername())
                 .map(existingTrainer -> {
                     existingTrainer.setFirstName(trainer.getFirstName());
                     existingTrainer.setLastName(trainer.getLastName());
