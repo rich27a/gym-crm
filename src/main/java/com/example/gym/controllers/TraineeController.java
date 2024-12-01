@@ -3,7 +3,9 @@ package com.example.gym.controllers;
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.dtos.TraineeProfileResponse;
 import com.example.gym.dtos.TraineeProfileUpdateResponseDTO;
+import com.example.gym.dtos.TrainerInfoResponseDTO;
 import com.example.gym.mappers.TraineeMapper;
+import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/trainees")
@@ -27,10 +26,12 @@ public class TraineeController {
 
     private final TraineeService traineeService;
     private final TraineeMapper traineeMapper;
+    private final TrainerMapper trainerMapper;
 
-    public TraineeController(TraineeService traineeService, TraineeMapper traineeMapper) {
+    public TraineeController(TraineeService traineeService, TraineeMapper traineeMapper, TrainerMapper trainerMapper) {
         this.traineeService = traineeService;
         this.traineeMapper = traineeMapper;
+        this.trainerMapper = trainerMapper;
     }
 
     @PostMapping
@@ -91,8 +92,14 @@ public class TraineeController {
 
 
     @GetMapping("/{username}/unassigned-trainers")
-    public List<Trainer> getUnassignedTrainers(@PathVariable String username) {
-        return traineeService.getUnassignedTrainers(username);
+    public ResponseEntity<List<TrainerInfoResponseDTO>> getUnassignedTrainers(@PathVariable String username) {
+        List<TrainerInfoResponseDTO> unassignedTrainers = traineeService.getUnassignedTrainers(username).stream()
+                .map(trainer -> trainerMapper.toTrainerInfoResponse(trainer))
+                .toList();
+        if (unassignedTrainers.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(unassignedTrainers);
     }
     @PutMapping("/{id}/activate")
     public void activateDeactivate(@PathVariable Long id){
