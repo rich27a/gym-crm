@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
     public Optional<Trainer> findByUsername(String username);
+    List<Trainer> findByUsernameIn(List<String> usernames);
 @Query("SELECT t FROM Trainer t WHERE t NOT IN (SELECT trainers FROM Trainee tr JOIN tr.trainers trainers WHERE tr.username = :username)")
 List<Trainer> findTrainersNotAssignedToTrainee(@Param("username") String username);
 }
