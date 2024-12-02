@@ -1,15 +1,19 @@
 package com.example.gym.services;
 
+import com.example.gym.dtos.TrainerInfoResponseDTO;
+import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.repositories.TraineeRepository;
+import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.utils.Profile;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +28,16 @@ public class TraineeService {
     private final TraineeRepository traineeRepository;
     private final TrainerService trainerService;
     private final PasswordEncoder passwordEncoder;
+    private final TrainerMapper trainerMapper;
+    private final TrainerRepository trainerRepository;
 
-    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository) {
         this.traineeRepository = traineeRepository;
         this.trainerService = trainerService;
         this.passwordEncoder = passwordEncoder;
+        this.trainerMapper = trainerMapper;
+        this.trainerRepository = trainerRepository;
     }
-
-
 
     private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
@@ -104,12 +110,21 @@ public class TraineeService {
                 .orElseThrow(() -> new RuntimeException("Trainee not found with username: " + username));
     }
     @Transactional
-    public Trainee updateTraineeTrainerList(Long traineeId, List<Long> trainersIds){
-        logger.info("updating trainee with id: {}", traineeId);
-        Trainee trainee = traineeRepository.findById(traineeId)
-                .orElseThrow(() -> new EntityNotFoundException("Trainee not found"));
-        trainee.setTrainerList(trainerService.findAllByIds(trainersIds));
-        return traineeRepository.save(trainee);
+    public Optional<List<TrainerInfoResponseDTO>> updateTraineeTrainerList(String username, List<String> trainersUsernames){
+        logger.info("updating trainee with username: {}", username);
+        return traineeRepository.findByUsername(username)
+                .map(trainee -> {
+                   List<Trainer> trainers = trainerRepository.findByUsernameIn(trainersUsernames);
+                   if(trainers.size() != trainersUsernames.size()){
+                       throw new IllegalArgumentException("One or more trainers not found");
+                   }
+                   trainee.setTrainerList(trainers);
+                   traineeRepository.save(trainee);
+
+                   return trainers.stream()
+                           .map(trainer -> trainerMapper.toTrainerInfoResponse(trainer))
+                           .toList();
+                });
     }
 
     @Transactional
