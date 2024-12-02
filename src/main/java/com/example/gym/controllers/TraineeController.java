@@ -1,9 +1,6 @@
 package com.example.gym.controllers;
 
-import com.example.gym.dtos.PasswordChangeDto;
-import com.example.gym.dtos.TraineeProfileResponse;
-import com.example.gym.dtos.TraineeProfileUpdateResponseDTO;
-import com.example.gym.dtos.TrainerInfoResponseDTO;
+import com.example.gym.dtos.*;
 import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.*;
@@ -67,14 +64,18 @@ public class TraineeController {
     }
 
     @GetMapping("/{username}/trainings")
-    public List<Training> getTraineeTrainings(
+    public ResponseEntity<List<TrainingInfoResponseDTO>> getTraineeTrainings(
             @PathVariable String username,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
             @RequestParam(required = false) String trainerName,
             @RequestParam(required = false) Specialization trainingType) {
 
-        return traineeService.getTraineeTrainingsByCriteria(username, fromDate, toDate, trainerName, trainingType);
+        return traineeService.getTraineeTrainingsByCriteria(username, fromDate, toDate, trainerName, trainingType)
+                .map(trainings -> {
+                    return trainings.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(trainings) : ResponseEntity.ok(trainings);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("trainee not found"));
     }
 
     @PutMapping("/{username}/trainers")
@@ -83,7 +84,7 @@ public class TraineeController {
             @RequestBody(required = true) List<String> trainersUsernames) {
         return traineeService.updateTraineeTrainerList(username, trainersUsernames)
                 .map(trainerInfoResponseDTOS -> ResponseEntity.ok(trainerInfoResponseDTOS))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("trainee not found"));
     }
     @PutMapping("/{username}/change-password")
     public Boolean updatePassword(@PathVariable String username,
