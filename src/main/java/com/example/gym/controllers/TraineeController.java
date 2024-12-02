@@ -77,11 +77,13 @@ public class TraineeController {
         return traineeService.getTraineeTrainingsByCriteria(username, fromDate, toDate, trainerName, trainingType);
     }
 
-    @PutMapping("/{traineeId}/trainers")
-    public Trainee updateTraineeTrainers(
-            @PathVariable Long traineeId,
-            @RequestBody List<Long> trainerIds) {
-        return traineeService.updateTraineeTrainerList(traineeId, trainerIds);
+    @PutMapping("/{username}/trainers")
+    public ResponseEntity<List<TrainerInfoResponseDTO>> updateTraineeTrainers(
+            @PathVariable String username,
+            @RequestBody(required = true) List<String> trainersUsernames) {
+        return traineeService.updateTraineeTrainerList(username, trainersUsernames)
+                .map(trainerInfoResponseDTOS -> ResponseEntity.ok(trainerInfoResponseDTOS))
+                .orElse(ResponseEntity.notFound().build());
     }
     @PutMapping("/{username}/change-password")
     public Boolean updatePassword(@PathVariable String username,
