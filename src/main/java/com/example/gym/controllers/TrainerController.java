@@ -3,6 +3,7 @@ package com.example.gym.controllers;
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.dtos.TrainerProfileResponse;
 import com.example.gym.dtos.TrainerProfileUpdateResponseDTO;
+import com.example.gym.dtos.TrainingInfoResponseDTO;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
@@ -12,6 +13,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,13 +72,15 @@ public class TrainerController {
         return trainerService.deleteTrainerByUsername(username);
     }
     @GetMapping("/{username}/trainings")
-    public List<Training> getTrainerTrainings(
+    public ResponseEntity<List<TrainingInfoResponseDTO>> getTrainerTrainings(
             @PathVariable String username,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
             @RequestParam(required = false) String traineeName) {
 
-        return trainerService.getTrainerTrainingsByCriteria(username, fromDate, toDate, traineeName);
+        return trainerService.getTrainerTrainingsByCriteria(username, fromDate, toDate, traineeName)
+                .map(trainingInfoResponseDTOS -> trainingInfoResponseDTOS.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(trainingInfoResponseDTOS) : ResponseEntity.ok(trainingInfoResponseDTOS))
+                .orElseThrow(() -> new ResourceNotFoundException("trainer not found"));
     }
     @PutMapping("/{username}/change-password")
     public Boolean updatePassword(@PathVariable String username,
