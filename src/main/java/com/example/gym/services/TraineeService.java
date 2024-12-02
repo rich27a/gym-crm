@@ -1,7 +1,9 @@
 package com.example.gym.services;
 
 import com.example.gym.dtos.TrainerInfoResponseDTO;
+import com.example.gym.dtos.TrainingInfoResponseDTO;
 import com.example.gym.mappers.TrainerMapper;
+import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
@@ -30,13 +32,15 @@ public class TraineeService {
     private final PasswordEncoder passwordEncoder;
     private final TrainerMapper trainerMapper;
     private final TrainerRepository trainerRepository;
+    private final TrainingMapper trainingMapper;
 
-    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository, TrainingMapper trainingMapper) {
         this.traineeRepository = traineeRepository;
         this.trainerService = trainerService;
         this.passwordEncoder = passwordEncoder;
         this.trainerMapper = trainerMapper;
         this.trainerRepository = trainerRepository;
+        this.trainingMapper = trainingMapper;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
@@ -94,7 +98,7 @@ public class TraineeService {
     }
 
     @Transactional
-    public List<Training> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, Specialization trainingType) {
+    public Optional<List<TrainingInfoResponseDTO>> getTraineeTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String trainerName, Specialization trainingType) {
         logger.info("searching trainee with username: {}", username);
 
         return traineeRepository.findByUsername(username)
@@ -105,9 +109,9 @@ public class TraineeService {
                                         (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
                                         (trainingType == null || training.getTrainingType().getTrainingType().equals(trainingType))
                         )
-                        .collect(Collectors.toList())
-                )
-                .orElseThrow(() -> new RuntimeException("Trainee not found with username: " + username));
+                        .map(training -> trainingMapper.toTrainingInfoResponse(training))
+                        .toList()
+                );
     }
     @Transactional
     public Optional<List<TrainerInfoResponseDTO>> updateTraineeTrainerList(String username, List<String> trainersUsernames){
