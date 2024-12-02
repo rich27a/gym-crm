@@ -1,6 +1,7 @@
 package com.example.gym.mappers;
 
 import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.models.TrainingType;
 import org.mapstruct.Mapper;
@@ -14,11 +15,17 @@ import java.util.Date;
 public interface TrainingMapper {
 
     @Mapping(source = "trainingType", target = "trainingType")
+    @Mapping(source = "trainer", target = "trainerName")
+    @Mapping(source = "name", target = "trainingName")
     @Mapping(source = "trainingDate", target = "trainingDate", dateFormat = "yyyy-MM-dd")
     TrainingInfoResponseDTO toTrainingInfoResponse(Training training);
 
     default String mapSpecialization(TrainingType specialization) {
         return specialization != null ? specialization.getTrainingType().name() : "UNKNOWN";
+    }
+
+    default String mapTrainerName(Trainer trainer){
+        return trainer != null ? trainer.getFirstName() + " " + trainer.getLastName() : "UNKNOWN";
     }
 
     default LocalDate mapDateToLocalDate(Date date) {
