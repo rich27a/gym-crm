@@ -1,5 +1,7 @@
 package com.example.gym.services;
 
+import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.repositories.TrainerRepository;
@@ -19,10 +21,12 @@ import java.util.stream.Collectors;
 public class TrainerService {
     private final TrainerRepository trainerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TrainingMapper trainingMapper;
 
-    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder) {
+    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder, TrainingMapper trainingMapper) {
         this.trainerRepository = trainerRepository;
         this.passwordEncoder = passwordEncoder;
+        this.trainingMapper = trainingMapper;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
@@ -71,7 +75,7 @@ public class TrainerService {
     }
 
     @Transactional
-    public List<Training> getTrainerTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String traineeName) {
+    public Optional<List<TrainingInfoResponseDTO>> getTrainerTrainingsByCriteria(String username, LocalDate fromDate, LocalDate toDate, String traineeName) {
         logger.info("searching trainer with username: {}", username);
         return trainerRepository.findByUsername(username)
                 .map(trainee -> trainee.getTrainingList().stream()
@@ -80,9 +84,9 @@ public class TrainerService {
                                         (toDate == null || !training.getTrainingDate().isAfter(toDate)) &&
                                         (traineeName == null || training.getTrainee().getUsername().equals(traineeName))
                         )
-                        .collect(Collectors.toList())
-                )
-                .orElseThrow(() -> new RuntimeException("Trainer not found with username: " + username));
+                        .map(training -> trainingMapper.toTrainingInfoResponse(training))
+                        .toList()
+                );
     }
 
     @Transactional
