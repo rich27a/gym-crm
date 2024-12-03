@@ -152,13 +152,13 @@ public class TraineeService {
         ).orElseGet(() -> false);
     }
     @Transactional
-    public void activate(Long id){
-        logger.info("updating trainee with id: {}", id);
-        traineeRepository.findById(id)
+    public void activate(String username, Boolean isActive){
+        logger.info("updating trainee with username: {}", username);
+        traineeRepository.findByUsername(username)
                 .map(trainer -> {
-                    trainer.setActive(!trainer.isActive());
+                    trainer.setActive(isActive);
                     return traineeRepository.save(trainer);
-                }).orElseThrow(() -> new RuntimeException("Trainer not found"));
+                }).orElseThrow(() -> new ResourceNotFoundException("Trainee not found"));
     }
 
     @Transactional

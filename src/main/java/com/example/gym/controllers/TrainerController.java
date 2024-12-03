@@ -1,9 +1,6 @@
 package com.example.gym.controllers;
 
-import com.example.gym.dtos.PasswordChangeDto;
-import com.example.gym.dtos.TrainerProfileResponse;
-import com.example.gym.dtos.TrainerProfileUpdateResponseDTO;
-import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.dtos.*;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
@@ -88,8 +85,11 @@ public class TrainerController {
     ){
         return trainerService.changePassword(username, passwordChangeDto.getNewPassword(), passwordChangeDto.getOldPassword());
     }
-    @PutMapping("/{id}/activate")
-    public void activateDeactivate(@PathVariable Long id){
-        trainerService.activate(id);
+
+
+    @PatchMapping("/{username}/status")
+    public ResponseEntity<Void> updateTrainerStatus(@PathVariable String username, @Valid @RequestBody StatusUpdateDTO statusUpdateDTO){
+        trainerService.activate(username, statusUpdateDTO.getActive());
+        return ResponseEntity.ok().build();
     }
 }

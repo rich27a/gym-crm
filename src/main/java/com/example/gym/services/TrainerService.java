@@ -7,6 +7,7 @@ import com.example.gym.models.Training;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -112,13 +113,13 @@ public class TrainerService {
         ).orElseGet(() -> false);
     }
     @Transactional
-    public void activate(Long id){
-        logger.info("updating trainer with id: {}", id);
-        trainerRepository.findById(id)
+    public void activate(String username, Boolean isActive){
+        logger.info("updating trainer with username: {}", username);
+        trainerRepository.findByUsername(username)
                 .map(trainer -> {
-                    trainer.setActive(!trainer.isActive());
+                    trainer.setActive(isActive);
                     return trainerRepository.save(trainer);
-                }).orElseThrow(() -> new RuntimeException("Trainer not found"));
+                }).orElseThrow(() -> new ResourceNotFoundException("Trainer not found"));
     }
 
     @Transactional

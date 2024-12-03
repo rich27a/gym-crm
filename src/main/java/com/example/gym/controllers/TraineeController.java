@@ -104,8 +104,10 @@ public class TraineeController {
         }
         return ResponseEntity.ok(unassignedTrainers);
     }
-    @PutMapping("/{id}/activate")
-    public void activateDeactivate(@PathVariable Long id){
-        traineeService.activate(id);
+    @PatchMapping("/{username}/status")
+    public ResponseEntity<Void> updateTraineeStatus(@PathVariable String username, @RequestBody StatusUpdateDTO statusUpdateDTO){
+        System.out.println("statusUpdateDTO = " + statusUpdateDTO.getActive());
+        traineeService.activate(username, statusUpdateDTO.getActive());
+        return ResponseEntity.ok().build();
     }
 }
