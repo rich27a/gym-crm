@@ -1,14 +1,14 @@
 package com.example.gym.controllers;
 
 import com.example.gym.dtos.TrainingRequestDTO;
+import com.example.gym.dtos.TrainingTypeDTO;
 import com.example.gym.services.TrainingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/trainings")
@@ -24,5 +24,13 @@ public class TrainingController {
         return trainingService.createTraining(training)
                 .map(created -> ResponseEntity.ok(created))
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false));
+    }
+
+    @GetMapping("/training-types")
+    public ResponseEntity<List<TrainingTypeDTO>> getTrainingTypes(){
+        List<TrainingTypeDTO> trainingTypeDTOS = trainingService.getAllTrainingTypes();
+        return trainingTypeDTOS.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(trainingTypeDTOS);
     }
 }

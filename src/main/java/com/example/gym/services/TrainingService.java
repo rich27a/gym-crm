@@ -2,6 +2,7 @@ package com.example.gym.services;
 
 import com.example.gym.dao.TrainingDAO;
 import com.example.gym.dtos.TrainingRequestDTO;
+import com.example.gym.dtos.TrainingTypeDTO;
 import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
@@ -9,12 +10,14 @@ import com.example.gym.models.Training;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.repositories.TrainingRepository;
+import com.example.gym.repositories.TrainingTypeRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,12 +25,14 @@ public class TrainingService {
     private final TrainingRepository trainingRepository;
     private final TrainerRepository trainerRepository;
     private final TraineeRepository traineeRepository;
+    private final TrainingTypeRepository trainingTypeRepository;
     private final TrainingMapper trainingMapper;
 
-    public TrainingService(TrainingRepository trainingRepository, TrainerRepository trainerRepository, TraineeRepository traineeRepository, TrainingMapper trainingMapper) {
+    public TrainingService(TrainingRepository trainingRepository, TrainerRepository trainerRepository, TraineeRepository traineeRepository, TrainingTypeRepository trainingTypeRepository, TrainingMapper trainingMapper) {
         this.trainingRepository = trainingRepository;
         this.trainerRepository = trainerRepository;
         this.traineeRepository = traineeRepository;
+        this.trainingTypeRepository = trainingTypeRepository;
         this.trainingMapper = trainingMapper;
     }
 
@@ -45,6 +50,13 @@ public class TrainingService {
 
         trainingRepository.save(training);
         return Optional.of(true);
+    }
+
+    @Transactional
+    public List<TrainingTypeDTO> getAllTrainingTypes(){
+        return trainingTypeRepository.findAll()
+                .stream().map(trainingType -> trainingMapper.toTrainingTypeDTO(trainingType))
+                .toList();
     }
     @Transactional
     public Optional<Training> selectTrainingProfile(Long id) {
