@@ -50,9 +50,9 @@ public class GymFacade {
         return traineeService.selectTraineeProfile(id);
     }
 
-    public Training createTraining(Training training) {
-        return trainingService.createTraining(training);
-    }
+//    public Training createTraining(Training training) {
+//        return trainingService.createTraining(training);
+//    }
     public Optional<Training> getTraining(Long id) {
         return trainingService.selectTrainingProfile(id);
     }
