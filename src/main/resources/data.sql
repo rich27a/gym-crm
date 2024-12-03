@@ -14,10 +14,10 @@ INSERT INTO trainees(user_id, date_of_birth, address) VALUES(4, '2000-06-06', 'A
 
 
 
-INSERT INTO trainings(training_id, trainee_user_id, trainer_user_id, training_name, training_type_id, training_date, training_duration)
-VALUES(1, 3, 1, 'Fit me', 1, '2024-06-06', 60);
-INSERT INTO trainings(training_id, trainee_user_id, trainer_user_id, training_name, training_type_id, training_date, training_duration)
-VALUES(2, 3, 2, 'Fit me 2.0', 1, '2024-06-07', 60);
+INSERT INTO trainings( trainee_user_id, trainer_user_id, training_name, training_type_id, training_date, training_duration)
+VALUES( 3, 1, 'Fit me', 1, '2024-06-06', 60);
+INSERT INTO trainings( trainee_user_id, trainer_user_id, training_name, training_type_id, training_date, training_duration)
+VALUES( 3, 2, 'Fit me 2.0', 1, '2024-06-07', 60);
 
 INSERT INTO trainee_trainer(trainee_id, trainer_id) VALUES(3,1);
 INSERT INTO trainee_trainer(trainee_id, trainer_id) VALUES(3,2);

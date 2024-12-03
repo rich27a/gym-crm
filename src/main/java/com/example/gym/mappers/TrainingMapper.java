@@ -1,6 +1,7 @@
 package com.example.gym.mappers;
 
 import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.dtos.TrainingRequestDTO;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.models.TrainingType;
@@ -19,6 +20,11 @@ public interface TrainingMapper {
     @Mapping(source = "name", target = "trainingName")
     @Mapping(source = "trainingDate", target = "trainingDate", dateFormat = "yyyy-MM-dd")
     TrainingInfoResponseDTO toTrainingInfoResponse(Training training);
+
+    @Mapping(target = "trainee", ignore = true) // El trainee será configurado manualmente
+    @Mapping(target = "trainer", ignore = true) // El trainer será configurado manualmente
+    @Mapping(source = "trainingName", target = "name")
+    Training toEntity(TrainingRequestDTO request);
 
     default String mapSpecialization(TrainingType specialization) {
         return specialization != null ? specialization.getTrainingType().name() : "UNKNOWN";

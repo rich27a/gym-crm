@@ -1,7 +1,13 @@
 package com.example.gym.services;
 
 import com.example.gym.dao.TrainingDAO;
+import com.example.gym.dtos.TrainingRequestDTO;
+import com.example.gym.mappers.TrainingMapper;
+import com.example.gym.models.Trainee;
+import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
+import com.example.gym.repositories.TraineeRepository;
+import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.repositories.TrainingRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -14,17 +20,31 @@ import java.util.Optional;
 @Service
 public class TrainingService {
     private final TrainingRepository trainingRepository;
+    private final TrainerRepository trainerRepository;
+    private final TraineeRepository traineeRepository;
+    private final TrainingMapper trainingMapper;
 
-    public TrainingService(TrainingRepository trainingRepository) {
+    public TrainingService(TrainingRepository trainingRepository, TrainerRepository trainerRepository, TraineeRepository traineeRepository, TrainingMapper trainingMapper) {
         this.trainingRepository = trainingRepository;
+        this.trainerRepository = trainerRepository;
+        this.traineeRepository = traineeRepository;
+        this.trainingMapper = trainingMapper;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
 
     @Transactional
-    public Training createTraining(Training training) {
-        logger.debug("Creating Training with name: {}", training.getName());
-        return trainingRepository.save(training);
+    public Optional<Boolean> createTraining(TrainingRequestDTO requestTraining) {
+        logger.debug("Creating Training with name: {}", requestTraining.getTrainingName());
+        Trainer trainer = trainerRepository.findByUsername(requestTraining.getTrainerUsername()).orElseThrow(() -> new IllegalArgumentException("trainer not valid"));
+        Trainee trainee = traineeRepository.findByUsername(requestTraining.getTraineeUsername()).orElseThrow(() -> new IllegalArgumentException("trainee not valid"));
+
+        Training training = trainingMapper.toEntity(requestTraining);
+        training.setTrainee(trainee);
+        training.setTrainer(trainer);
+
+        trainingRepository.save(training);
+        return Optional.of(true);
     }
     @Transactional
     public Optional<Training> selectTrainingProfile(Long id) {
