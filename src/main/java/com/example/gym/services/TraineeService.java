@@ -161,17 +161,7 @@ public class TraineeService {
                 }).orElseThrow(() -> new ResourceNotFoundException("Trainee not found"));
     }
 
-    @Transactional
-    public Optional<Trainee> selectTraineeProfile(Long id) {
-        logger.info("searching trainee with id: {}", id);
-        return traineeRepository.findById(id);
-    }
-
-    @Transactional
-    public List<Trainee> getTrainees(){
-        logger.info("searching all trainees");
-        return traineeRepository.findAll();
-    }
+    
 
 
 }
