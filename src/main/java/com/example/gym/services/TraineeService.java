@@ -44,7 +44,7 @@ public class TraineeService {
         this.traineeMapper = traineeMapper;
     }
 
-    private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
+    private static final Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
     @Transactional
     public Trainee createTraineeProfile(TraineeRegistrationRequestDTO traineeRegistrationRequestDTO) {
@@ -65,13 +65,6 @@ public class TraineeService {
     public Optional<Trainee> findTraineeByUsername(String username){
         logger.info("searching for trainee with username {}", username);
         return traineeRepository.findByUsername(username);
-    }
-
-    @Transactional
-    public Optional<Trainee> findTraineeById(Long id){
-        logger.info("searching for trainee with id {}", id);
-        System.out.println(traineeRepository.findById(id));
-        return traineeRepository.findById(id);
     }
 
     @Transactional
