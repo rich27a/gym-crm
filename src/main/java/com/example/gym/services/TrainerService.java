@@ -1,9 +1,12 @@
 package com.example.gym.services;
 
 import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.dtos.UpdateTrainerRequestDTO;
 import com.example.gym.mappers.TrainingMapper;
+import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
+import com.example.gym.models.TrainingType;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
@@ -45,14 +48,15 @@ public class TrainerService {
     }
 
     @Transactional
-    public Optional<Trainer> updateTrainerProfile(Trainer trainer) {
-        logger.info("searching trainer with username: {}", trainer.getUsername());
-        return trainerRepository.findByUsername(trainer.getUsername())
+    public Optional<Trainer> updateTrainerProfile(String username, UpdateTrainerRequestDTO trainer) {
+        logger.info("searching trainer with username: {}", username);
+        return trainerRepository.findByUsername(username)
                 .map(existingTrainer -> {
                     existingTrainer.setFirstName(trainer.getFirstName());
                     existingTrainer.setLastName(trainer.getLastName());
-                    existingTrainer.setTrainingType(trainer.getTrainingType());
-                    existingTrainer.setUsername(Profile.generateUsername(existingTrainer.getFirstName(), existingTrainer.getLastName()));
+                    TrainingType trainingType = new TrainingType();
+                    trainingType.setTrainingType(Specialization.valueOf(trainer.getSpecialization()));
+                    existingTrainer.setTrainingType(trainingType);
                     return trainerRepository.save(existingTrainer);
                 });
     }
@@ -65,11 +69,9 @@ public class TrainerService {
     @Transactional
     public boolean deleteTrainerByUsername(String username) {
         logger.info("searching trainer with username: {}", username);
-
         return trainerRepository.findByUsername(username)
                 .map(trainer -> {
                     trainerRepository.delete(trainer);
-                    logger.info("Trainer with username {} successfully deleted", username);
                     return true;
                 })
                 .orElse(false);
