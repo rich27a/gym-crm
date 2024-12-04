@@ -56,9 +56,9 @@ public class TrainerController {
         return ResponseEntity.created(location).body(response);
     }
 
-    @PutMapping
-    public ResponseEntity<TrainerProfileUpdateResponseDTO> update(@Valid @RequestBody Trainer trainer){
-        return trainerService.updateTrainerProfile(trainer)
+    @PutMapping("/{username}")
+    public ResponseEntity<TrainerProfileUpdateResponseDTO> update(@PathVariable(required = true) String username, @Valid @RequestBody UpdateTrainerRequestDTO trainer){
+        return trainerService.updateTrainerProfile(username, trainer)
                 .map(updatedTrainer -> ResponseEntity.ok(trainerMapper.toUpdateResponse(updatedTrainer)))
                 .orElseThrow(() -> new ResourceNotFoundException("Trainer not found"));
     }
