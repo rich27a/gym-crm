@@ -22,9 +22,9 @@ public class GymFacade {
         this.trainingService = trainingService;
     }
 
-    public Trainer createTrainer(Trainer trainer) {
-        return trainerService.createTrainerProfile(trainer);
-    }
+//    public Trainer createTrainer(Trainer trainer) {
+//        return trainerService.createTrainerProfile(trainer);
+//    }
 
 //    public Optional<Trainer> updateTrainer(Trainer trainer) {
 //        return trainerService.updateTrainerProfile(trainer);
