@@ -29,14 +29,11 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
                     http.requestMatchers( "/login").permitAll();
-                    http.requestMatchers( "api/auth/login").permitAll();
-
-//                    http.requestMatchers( "/api/trainees").permitAll();
-//                    http.requestMatchers("/api/trainers").permitAll();
-
+                    http.requestMatchers( HttpMethod.GET,"api/auth/login").permitAll();
+                    http.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/trainees").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/trainers").permitAll();
                     http.anyRequest().authenticated();
