@@ -14,14 +14,14 @@ import java.util.Map;
 public class ValidatonFieldsExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleInvalidArguments(MethodArgumentNotValidException exception){
+    public ResponseEntity<Map<String, String>> handleInvalidArguments(MethodArgumentNotValidException exception){
         Map<String, String> errors = new HashMap<>();
 
         exception.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
 
-        return errors;
+        return ResponseEntity.badRequest().body(errors);
     }
 
     @ExceptionHandler({ResourceNotFoundException.class})
