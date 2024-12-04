@@ -7,7 +7,6 @@ import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
-import com.example.gym.models.Training;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.utils.Profile;
@@ -15,14 +14,12 @@ import jakarta.transaction.Transactional;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TraineeService {
@@ -109,7 +106,7 @@ public class TraineeService {
                                         (trainerName == null || training.getTrainer().getUsername().equals(trainerName)) &&
                                         (trainingType == null || training.getTrainingType().getTrainingType().equals(trainingType))
                         )
-                        .map(training -> trainingMapper.toTrainingInfoResponse(training))
+                        .map(trainingMapper::toTrainingInfoResponse)
                         .toList()
                 );
     }
@@ -126,7 +123,7 @@ public class TraineeService {
                    traineeRepository.save(trainee);
 
                    return trainers.stream()
-                           .map(trainer -> trainerMapper.toTrainerInfoResponse(trainer))
+                           .map(trainerMapper::toTrainerInfoResponse)
                            .toList();
                 });
     }
