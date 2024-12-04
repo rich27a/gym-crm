@@ -32,13 +32,10 @@ public class TraineeController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> save(@Valid @RequestBody Trainee trainee){
-        Trainee traineeCreated = traineeService.createTraineeProfile(trainee);
-        URI location = URI.create("/api/trainees/" + traineeCreated.getId());
-        Map<String, String> response = new HashMap<>();
-        response.put("username", traineeCreated.getUsername());
-        response.put("password", traineeCreated.getPassword());
-        return ResponseEntity.created(location).body(response);
+    public ResponseEntity<TraineeRegistrationResponseDTO> save(@Valid @RequestBody TraineeRegistrationRequestDTO traineeRegistrationRequestDTO){
+        Trainee traineeCreated = traineeService.createTraineeProfile(traineeRegistrationRequestDTO);
+        URI location = URI.create("/api/trainees/" + traineeCreated.getUsername());
+        return ResponseEntity.created(location).body(traineeMapper.toTraineeRegistrationResponse(traineeCreated));
     }
 
     @PutMapping

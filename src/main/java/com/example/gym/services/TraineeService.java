@@ -1,7 +1,9 @@
 package com.example.gym.services;
 
+import com.example.gym.dtos.TraineeRegistrationRequestDTO;
 import com.example.gym.dtos.TrainerInfoResponseDTO;
 import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
@@ -30,27 +32,32 @@ public class TraineeService {
     private final TrainerMapper trainerMapper;
     private final TrainerRepository trainerRepository;
     private final TrainingMapper trainingMapper;
+    private final TraineeMapper traineeMapper;
 
-    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository, TrainingMapper trainingMapper) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository, TrainingMapper trainingMapper, TraineeMapper traineeMapper) {
         this.traineeRepository = traineeRepository;
         this.trainerService = trainerService;
         this.passwordEncoder = passwordEncoder;
         this.trainerMapper = trainerMapper;
         this.trainerRepository = trainerRepository;
         this.trainingMapper = trainingMapper;
+        this.traineeMapper = traineeMapper;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
     @Transactional
-    public Trainee createTraineeProfile(Trainee trainee) {
+    public Trainee createTraineeProfile(TraineeRegistrationRequestDTO traineeRegistrationRequestDTO) {
         logger.info("starting createTraineeProfile...");
-        String username = Profile.generateUsername(trainee.getFirstName(),trainee.getLastName());
+        String username = Profile.generateUsername(traineeRegistrationRequestDTO.getFirstName(),traineeRegistrationRequestDTO.getLastName());
         String password = Profile.generatePassword();
+
+        Trainee trainee = traineeMapper.toTraineeFromRegistrationRequest(traineeRegistrationRequestDTO);
         trainee.setUsername(username);
         trainee.setPassword(password);
         trainee.setActive(true);
-        logger.info("saving trainee with id {}", trainee.getId());
+
+        logger.info("saving trainee with username {}", trainee.getUsername());
         return traineeRepository.save(trainee);
     }
 
