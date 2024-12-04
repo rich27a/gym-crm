@@ -45,15 +45,9 @@ public class TrainerController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createTrainer(@Valid @RequestBody Trainer trainer){
-
-        Trainer createdTrainer = trainerService.createTrainerProfile(trainer);
-        URI location = URI.create("/api/trainers/" + createdTrainer.getId());
-        Map<String, String> response = new HashMap<>();
-        response.put("username", createdTrainer.getUsername());
-        response.put("password", createdTrainer.getPassword());
-
-        return ResponseEntity.created(location).body(response);
+    public ResponseEntity<TrainerRegistrationResponseDTO> createTrainer(@Valid @RequestBody TrainerRegistrationRequestDTO trainer){
+        TrainerRegistrationResponseDTO trainerRegistrationResponseDTO = trainerService.createTrainerProfile(trainer);
+        return ResponseEntity.created(URI.create(trainerRegistrationResponseDTO.getUsername())).body(trainerRegistrationResponseDTO);
     }
 
     @PutMapping("/{username}")

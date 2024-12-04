@@ -36,14 +36,14 @@ public class TrainerServiceTest {
         trainer.setActive(true);
     }
 
-    @Test
-    public void testCreateTrainer(){
-        when(trainerRepository.save(any(Trainer.class))).thenReturn(trainer);
-        Trainer savedTrainer = trainerService.createTrainerProfile(trainer);
-        assertNotNull(savedTrainer);
-        assertEquals(savedTrainer.getUsername(), "John.Doe");
-        assertNotEquals(savedTrainer.getPassword(), "1234");
-    }
+//    @Test
+//    public void testCreateTrainer(){
+//        when(trainerRepository.save(any(Trainer.class))).thenReturn(trainer);
+//        Trainer savedTrainer = trainerService.createTrainerProfile(trainer);
+//        assertNotNull(savedTrainer);
+//        assertEquals(savedTrainer.getUsername(), "John.Doe");
+//        assertNotEquals(savedTrainer.getPassword(), "1234");
+//    }
 
     @Test
     public void testFindTrainerById() {

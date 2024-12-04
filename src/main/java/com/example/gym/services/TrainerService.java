@@ -1,7 +1,10 @@
 package com.example.gym.services;
 
+import com.example.gym.dtos.TrainerRegistrationRequestDTO;
+import com.example.gym.dtos.TrainerRegistrationResponseDTO;
 import com.example.gym.dtos.TrainingInfoResponseDTO;
 import com.example.gym.dtos.UpdateTrainerRequestDTO;
+import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
@@ -26,25 +29,28 @@ public class TrainerService {
     private final TrainerRepository trainerRepository;
     private final PasswordEncoder passwordEncoder;
     private final TrainingMapper trainingMapper;
+    private final TrainerMapper trainerMapper;
 
-    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder, TrainingMapper trainingMapper) {
+    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder, TrainingMapper trainingMapper, TrainerMapper trainerMapper) {
         this.trainerRepository = trainerRepository;
         this.passwordEncoder = passwordEncoder;
         this.trainingMapper = trainingMapper;
+        this.trainerMapper = trainerMapper;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
 
     @Transactional
-    public Trainer createTrainerProfile(Trainer trainer) {
+    public TrainerRegistrationResponseDTO createTrainerProfile(TrainerRegistrationRequestDTO trainer) {
         logger.info("starting createTraineeProfile...");
         String username = Profile.generateUsername(trainer.getFirstName(),trainer.getLastName());
         String password = Profile.generatePassword();
-        trainer.setUsername(username);
-        trainer.setPassword(password);
-        trainer.setActive(true);
-        logger.info("saving trainee with id {}", trainer.getId());
-        return trainerRepository.save(trainer);
+        Trainer createdTrainer = trainerMapper.toTrainerFromRequest(trainer);
+        createdTrainer.setUsername(username);
+        createdTrainer.setPassword(password);
+        createdTrainer.setActive(true);
+        logger.info("saving trainee with username {}", createdTrainer.getUsername());
+        return trainerMapper.toRegistrationResponse(trainerRepository.save(createdTrainer));
     }
 
     @Transactional
