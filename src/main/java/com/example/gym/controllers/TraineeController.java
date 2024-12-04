@@ -96,10 +96,9 @@ public class TraineeController {
         List<TrainerInfoResponseDTO> unassignedTrainers = traineeService.getUnassignedTrainers(username).stream()
                 .map(trainerMapper::toTrainerInfoResponse)
                 .toList();
-        if (unassignedTrainers.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(unassignedTrainers);
+        return unassignedTrainers.isEmpty()
+                ?  ResponseEntity.noContent().build()
+                : ResponseEntity.ok(unassignedTrainers);
     }
     @PatchMapping("/{username}/status")
     public ResponseEntity<Void> updateTraineeStatus(@PathVariable String username, @RequestBody StatusUpdateDTO statusUpdateDTO){
