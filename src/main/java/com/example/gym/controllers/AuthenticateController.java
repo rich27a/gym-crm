@@ -3,6 +3,7 @@ package com.example.gym.controllers;
 import com.example.gym.dtos.LoginPasswordDto;
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.services.AuthenticateService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Tag(name = "Authentication", description = "Controller for authentication")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticateController {

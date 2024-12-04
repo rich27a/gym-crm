@@ -3,6 +3,7 @@ package com.example.gym.controllers;
 import com.example.gym.dtos.TrainingRequestDTO;
 import com.example.gym.dtos.TrainingTypeDTO;
 import com.example.gym.services.TrainingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Trainings", description = "Controller for trainings")
 @RestController
 @RequestMapping("/api/trainings")
 public class TrainingController {

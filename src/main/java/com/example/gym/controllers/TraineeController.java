@@ -5,6 +5,7 @@ import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.*;
 
+@Tag(name = "Trainees", description = "Controller for trainees")
 @RestController
 @RequestMapping("/api/trainees")
 public class TraineeController {
