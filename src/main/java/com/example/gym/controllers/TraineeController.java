@@ -47,10 +47,7 @@ public class TraineeController {
                 .map(traineeUpdated -> ResponseEntity.ok(traineeMapper.toUpdatedResponse(traineeUpdated)))
                 .orElseThrow(()-> new EntityNotFoundException("trainee not found"));
     }
-    @GetMapping
-    public List<Trainee> getAll(){
-        return traineeService.getTrainees();
-    }
+
     @GetMapping("/{username}")
     public ResponseEntity<TraineeProfileResponse> getByUsername(@PathVariable String username){
         return traineeService.findTraineeByUsername(username)
@@ -83,7 +80,7 @@ public class TraineeController {
             @PathVariable String username,
             @RequestBody(required = true) List<String> trainersUsernames) {
         return traineeService.updateTraineeTrainerList(username, trainersUsernames)
-                .map(trainerInfoResponseDTOS -> ResponseEntity.ok(trainerInfoResponseDTOS))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("trainee not found"));
     }
     @PutMapping("/{username}/change-password")
@@ -97,7 +94,7 @@ public class TraineeController {
     @GetMapping("/{username}/unassigned-trainers")
     public ResponseEntity<List<TrainerInfoResponseDTO>> getUnassignedTrainers(@PathVariable String username) {
         List<TrainerInfoResponseDTO> unassignedTrainers = traineeService.getUnassignedTrainers(username).stream()
-                .map(trainer -> trainerMapper.toTrainerInfoResponse(trainer))
+                .map(trainerMapper::toTrainerInfoResponse)
                 .toList();
         if (unassignedTrainers.isEmpty()) {
             return ResponseEntity.noContent().build();

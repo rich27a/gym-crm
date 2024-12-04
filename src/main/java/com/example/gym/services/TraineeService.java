@@ -161,7 +161,7 @@ public class TraineeService {
                 }).orElseThrow(() -> new ResourceNotFoundException("Trainee not found"));
     }
 
-    
+
 
 
 }
