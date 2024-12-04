@@ -26,9 +26,9 @@ public class GymFacade {
         return trainerService.createTrainerProfile(trainer);
     }
 
-    public Optional<Trainer> updateTrainer(Trainer trainer) {
-        return trainerService.updateTrainerProfile(trainer);
-    }
+//    public Optional<Trainer> updateTrainer(Trainer trainer) {
+//        return trainerService.updateTrainerProfile(trainer);
+//    }
 
     public Optional<Trainer> getTrainer(Long id) {
         return trainerService.selectTrainerProfile(id);
