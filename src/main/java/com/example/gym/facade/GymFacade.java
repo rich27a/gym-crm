@@ -34,9 +34,9 @@ public class GymFacade {
         return trainerService.selectTrainerProfile(id);
     }
 
-    public Trainee createTrainee(Trainee trainee) {
-        return traineeService.createTraineeProfile(trainee);
-    }
+//    public Trainee createTrainee(Trainee trainee) {
+//        return traineeService.createTraineeProfile(trainee);
+//    }
 
     public Optional<Trainee> updateTrainee(Trainee trainee) {
         return traineeService.updateTraineeProfile(trainee);
@@ -46,9 +46,9 @@ public class GymFacade {
         traineeService.deleteTraineeByUsername(username);
     }
 
-    public Optional<Trainee> getTrainee(Long id) {
-        return traineeService.selectTraineeProfile(id);
-    }
+//    public Optional<Trainee> getTrainee(Long id) {
+//        return traineeService.selectTraineeProfile(id);
+//    }
 
 //    public Training createTraining(Training training) {
 //        return trainingService.createTraining(training);
