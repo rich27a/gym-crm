@@ -54,6 +54,7 @@ public class TrainingService {
 
     @Transactional
     public List<TrainingTypeDTO> getAllTrainingTypes(){
+        logger.debug("Getting all training-types");
         return trainingTypeRepository.findAll()
                 .stream().map(trainingType -> trainingMapper.toTrainingTypeDTO(trainingType))
                 .toList();
