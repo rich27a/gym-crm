@@ -49,7 +49,7 @@ public class TrainerController {
     @PostMapping
     public ResponseEntity<TrainerRegistrationResponseDTO> createTrainer(@Valid @RequestBody TrainerRegistrationRequestDTO trainer){
         TrainerRegistrationResponseDTO trainerRegistrationResponseDTO = trainerService.createTrainerProfile(trainer);
-        return ResponseEntity.created(URI.create(trainerRegistrationResponseDTO.getUsername())).body(trainerRegistrationResponseDTO);
+        return ResponseEntity.created(URI.create("/api/trainers/"+trainerRegistrationResponseDTO.getUsername())).body(trainerRegistrationResponseDTO);
     }
 
     @PutMapping("/{username}")
