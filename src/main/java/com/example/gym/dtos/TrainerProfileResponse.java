@@ -10,6 +10,9 @@ public class TrainerProfileResponse {
 
     private List<TraineeInfo> trainees;
 
+    public TrainerProfileResponse() {
+    }
+
     public TrainerProfileResponse(String firstName, String lastName, String specialization, boolean isActive, List<TraineeInfo> trainees) {
         this.firstName = firstName;
         this.lastName = lastName;
