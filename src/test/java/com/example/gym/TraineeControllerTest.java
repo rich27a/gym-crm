@@ -13,22 +13,38 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Base64;
 import java.util.Optional;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TraineeController.class)
+@Import(TraineeControllerTest.TestSecurityConfiguration.class)
 public class TraineeControllerTest {
+
+    @TestConfiguration
+    static class TestSecurityConfiguration {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+            return httpSecurity
+                    .csrf(csrf -> csrf.disable())
+                    .build();
+        }
+    }
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -39,7 +55,6 @@ public class TraineeControllerTest {
     private TraineeService traineeService;
 
     @Test
-    @WithMockUser(username = "validUsername", password = "validPassword")
     @DisplayName("Getting trainee by username")
     void testGetTraineeByUsername() throws Exception {
 
@@ -65,7 +80,7 @@ public class TraineeControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "validUsername", password = "validPassword")
+    @WithMockUser(username = "testUser", password = "testPass")
     @DisplayName("Register a new trainee")
     void testRegisterTrainee() throws Exception {
         TraineeRegistrationRequestDTO requestDTO = new TraineeRegistrationRequestDTO();
@@ -74,7 +89,7 @@ public class TraineeControllerTest {
 
         TraineeRegistrationResponseDTO responseDTO = new TraineeRegistrationResponseDTO();
         responseDTO.setUsername("John.Doe");
-        responseDTO.setPassword("123456789");
+        responseDTO.setPassword("password");
 
 
         Trainee createdTrainee = new Trainee();
