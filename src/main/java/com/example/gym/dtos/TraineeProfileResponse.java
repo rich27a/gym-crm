@@ -13,6 +13,9 @@ public class TraineeProfileResponse {
 
     private List<TrainerInfo> trainers;
 
+    public TraineeProfileResponse() {
+    }
+
     public TraineeProfileResponse(String firstName, String lastName, LocalDate dateOfBirth, String address, boolean isActive) {
         this.firstName = firstName;
         this.lastName = lastName;
