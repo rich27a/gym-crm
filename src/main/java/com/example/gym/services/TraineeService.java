@@ -19,8 +19,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -33,6 +36,10 @@ public class TraineeService {
     private final TrainerRepository trainerRepository;
     private final TrainingMapper trainingMapper;
     private final TraineeMapper traineeMapper;
+
+    private static final Map<String, Integer> usernameMap = new HashMap<>();
+    private static final SecureRandom random = new SecureRandom();
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository, TrainingMapper trainingMapper, TraineeMapper traineeMapper) {
         this.traineeRepository = traineeRepository;
@@ -49,8 +56,8 @@ public class TraineeService {
     @Transactional
     public Trainee createTraineeProfile(TraineeRegistrationRequestDTO traineeRegistrationRequestDTO) {
         logger.info("starting createTraineeProfile...");
-        String username = Profile.generateUsername(traineeRegistrationRequestDTO.getFirstName(),traineeRegistrationRequestDTO.getLastName());
-        String password = Profile.generatePassword();
+        String username = generateUsername(traineeRegistrationRequestDTO.getFirstName(),traineeRegistrationRequestDTO.getLastName());
+        String password = generatePassword();
 
         Trainee trainee = traineeMapper.toTraineeFromRegistrationRequest(traineeRegistrationRequestDTO);
         trainee.setUsername(username);
@@ -156,6 +163,25 @@ public class TraineeService {
                     trainer.setActive(isActive);
                     return traineeRepository.save(trainer);
                 }).orElseThrow(() -> new ResourceNotFoundException("Trainee not found"));
+    }
+
+    private String generateUsername(String firstName, String lastName){
+        String username = firstName + "." + lastName;
+        if (usernameMap.containsKey(username)) {
+            int count = usernameMap.get(username) + 1;
+            usernameMap.put(username, count);
+            return username + count;
+        } else {
+            usernameMap.put(username, 1);
+            return username;
+        }
+    }
+    private String generatePassword() {
+        StringBuilder password = new StringBuilder(10);
+        for (int i = 0; i < 10; i++) {
+            password.append(CHARS.charAt(random.nextInt(CHARS.length())));
+        }
+        return password.toString();
     }
 
 
