@@ -4,6 +4,7 @@ import com.example.gym.dtos.TrainerRegistrationRequestDTO;
 import com.example.gym.dtos.TrainerRegistrationResponseDTO;
 import com.example.gym.dtos.TrainingInfoResponseDTO;
 import com.example.gym.dtos.UpdateTrainerRequestDTO;
+import com.example.gym.exceptions.UsernameAlreadyExistsException;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
@@ -11,6 +12,7 @@ import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.models.TrainingType;
 import com.example.gym.repositories.TrainerRepository;
+import com.example.gym.repositories.UserRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -19,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -30,12 +33,17 @@ public class TrainerService {
     private final PasswordEncoder passwordEncoder;
     private final TrainingMapper trainingMapper;
     private final TrainerMapper trainerMapper;
+    private final UserRepository userRepository;
 
-    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder, TrainingMapper trainingMapper, TrainerMapper trainerMapper) {
+    private static final SecureRandom random = new SecureRandom();
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public TrainerService(TrainerRepository trainerRepository, PasswordEncoder passwordEncoder, TrainingMapper trainingMapper, TrainerMapper trainerMapper, UserRepository userRepository) {
         this.trainerRepository = trainerRepository;
         this.passwordEncoder = passwordEncoder;
         this.trainingMapper = trainingMapper;
         this.trainerMapper = trainerMapper;
+        this.userRepository = userRepository;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
@@ -45,6 +53,9 @@ public class TrainerService {
         logger.info("starting createTraineeProfile...");
         String username = Profile.generateUsername(trainer.getFirstName(),trainer.getLastName());
         String password = Profile.generatePassword();
+        if(userRepository.findByUsername(username).isPresent()){
+            throw new UsernameAlreadyExistsException("Username is already taken.");
+        };
         Trainer createdTrainer = trainerMapper.toTrainerFromRequest(trainer);
         createdTrainer.setUsername(username);
         createdTrainer.setPassword(password);
@@ -146,5 +157,15 @@ public class TrainerService {
     public List<Trainer> getTrainers(){
         logger.info("searching all trainers");
         return trainerRepository.findAll();
+    }
+    private String generateUsername(String firstName, String lastName){
+        return firstName + "." + lastName;
+    }
+    private String generatePassword() {
+        StringBuilder password = new StringBuilder(10);
+        for (int i = 0; i < 10; i++) {
+            password.append(CHARS.charAt(random.nextInt(CHARS.length())));
+        }
+        return password.toString();
     }
 }

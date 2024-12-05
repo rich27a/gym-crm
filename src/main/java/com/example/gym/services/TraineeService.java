@@ -3,14 +3,17 @@ package com.example.gym.services;
 import com.example.gym.dtos.TraineeRegistrationRequestDTO;
 import com.example.gym.dtos.TrainerInfoResponseDTO;
 import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.exceptions.UsernameAlreadyExistsException;
 import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
+import com.example.gym.models.User;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.TrainerRepository;
+import com.example.gym.repositories.UserRepository;
 import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -36,12 +39,13 @@ public class TraineeService {
     private final TrainerRepository trainerRepository;
     private final TrainingMapper trainingMapper;
     private final TraineeMapper traineeMapper;
+    private final UserRepository userRepository;
 
-    private static final Map<String, Integer> usernameMap = new HashMap<>();
+
     private static final SecureRandom random = new SecureRandom();
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository, TrainingMapper trainingMapper, TraineeMapper traineeMapper) {
+    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService, PasswordEncoder passwordEncoder, TrainerMapper trainerMapper, TrainerRepository trainerRepository, TrainingMapper trainingMapper, TraineeMapper traineeMapper, UserRepository userRepository) {
         this.traineeRepository = traineeRepository;
         this.trainerService = trainerService;
         this.passwordEncoder = passwordEncoder;
@@ -49,6 +53,7 @@ public class TraineeService {
         this.trainerRepository = trainerRepository;
         this.trainingMapper = trainingMapper;
         this.traineeMapper = traineeMapper;
+        this.userRepository = userRepository;
     }
 
     private static final Logger logger = LoggerFactory.getLogger(TraineeService.class);
@@ -58,6 +63,10 @@ public class TraineeService {
         logger.info("starting createTraineeProfile...");
         String username = generateUsername(traineeRegistrationRequestDTO.getFirstName(),traineeRegistrationRequestDTO.getLastName());
         String password = generatePassword();
+
+        if(userRepository.findByUsername(username).isPresent()){
+            throw new UsernameAlreadyExistsException("Username is already taken.");
+        };
 
         Trainee trainee = traineeMapper.toTraineeFromRegistrationRequest(traineeRegistrationRequestDTO);
         trainee.setUsername(username);
@@ -166,15 +175,7 @@ public class TraineeService {
     }
 
     private String generateUsername(String firstName, String lastName){
-        String username = firstName + "." + lastName;
-        if (usernameMap.containsKey(username)) {
-            int count = usernameMap.get(username) + 1;
-            usernameMap.put(username, count);
-            return username + count;
-        } else {
-            usernameMap.put(username, 1);
-            return username;
-        }
+        return firstName + "." + lastName;
     }
     private String generatePassword() {
         StringBuilder password = new StringBuilder(10);

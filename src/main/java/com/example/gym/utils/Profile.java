@@ -10,15 +10,15 @@ public class Profile {
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public static String generateUsername(String firstName, String lastName){
-        String username = firstName + "." + lastName;
-        if (usernameMap.containsKey(username)) {
-            int count = usernameMap.get(username) + 1;
-            usernameMap.put(username, count);
-            return username + count;
-        } else {
-            usernameMap.put(username, 1);
-            return username;
-        }
+        return firstName + "." + lastName;
+//        if (usernameMap.containsKey(username)) {
+//            int count = usernameMap.get(username) + 1;
+//            usernameMap.put(username, count);
+//            return username + count;
+//        } else {
+//            usernameMap.put(username, 1);
+//            return username;
+//        }
     }
 
     public static String generatePassword() {
