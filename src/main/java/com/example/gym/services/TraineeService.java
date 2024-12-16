@@ -10,11 +10,9 @@ import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
-import com.example.gym.models.User;
 import com.example.gym.repositories.TraineeRepository;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.repositories.UserRepository;
-import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -24,9 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -92,7 +88,7 @@ public class TraineeService {
                     existingTrainee.setLastName(trainee.getLastName());
                     existingTrainee.setDateOfBirth(trainee.getDateOfBirth());
                     existingTrainee.setAddress(trainee.getAddress());
-                    existingTrainee.setUsername(Profile.generateUsername(existingTrainee.getFirstName(), existingTrainee.getLastName()));
+                    existingTrainee.setUsername(generateUsername(existingTrainee.getFirstName(), existingTrainee.getLastName()));
                     return traineeRepository.save(existingTrainee);
                 });
     }
