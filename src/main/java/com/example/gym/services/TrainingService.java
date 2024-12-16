@@ -1,6 +1,5 @@
 package com.example.gym.services;
 
-import com.example.gym.dao.TrainingDAO;
 import com.example.gym.dtos.TrainingRequestDTO;
 import com.example.gym.dtos.TrainingTypeDTO;
 import com.example.gym.mappers.TrainingMapper;
@@ -14,7 +13,6 @@ import com.example.gym.repositories.TrainingTypeRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
