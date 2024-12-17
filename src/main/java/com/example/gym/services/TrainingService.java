@@ -57,10 +57,6 @@ public class TrainingService {
                 .stream().map(trainingType -> trainingMapper.toTrainingTypeDTO(trainingType))
                 .toList();
     }
-    @Transactional
-    public Optional<Training> selectTrainingProfile(Long id) {
-        logger.debug("Selecting Training profile with id: {}", id);
-        return trainingRepository.findById(id);
-    }
+    
 
 }
