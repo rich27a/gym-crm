@@ -2,6 +2,7 @@ package com.example.gym;
 
 import com.example.gym.controllers.TrainingController;
 import com.example.gym.dtos.TrainingRequestDTO;
+import com.example.gym.dtos.TrainingTypeDTO;
 import com.example.gym.repositories.TrainingRepository;
 import com.example.gym.services.TrainingService;
 import org.junit.jupiter.api.DisplayName;
@@ -16,15 +17,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import java.util.*;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TrainingController.class)
 @Import(TrainingControllerTest.TestSecurityConfiguration.class)
@@ -49,13 +48,6 @@ public class TrainingControllerTest {
     @Test
     @DisplayName("Add new training successfully")
     void testAddNewTraining() throws Exception {
-        TrainingRequestDTO trainingRequestDTO = new TrainingRequestDTO();
-        trainingRequestDTO.setTrainingName("Cardio Training");
-        trainingRequestDTO.setTrainingDate(LocalDate.parse("2022-02-02"));
-        trainingRequestDTO.setTrainingDuration(60);
-        trainingRequestDTO.setTraineeUsername("Trainee");
-        trainingRequestDTO.setTrainerUsername("Trainer");
-
         Mockito.when(trainingService.createTraining(Mockito.any(TrainingRequestDTO.class))).thenReturn(Optional.of(true));
 
         mockMvc.perform(post("/api/trainings")
@@ -69,6 +61,32 @@ public class TrainingControllerTest {
                                 "}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
+    }
+
+    @Test
+    @DisplayName("Get all training Types")
+    void testGetAllTrainingTypes() throws Exception {
+        TrainingTypeDTO trainingTypeDTO = new TrainingTypeDTO();
+        trainingTypeDTO.setTrainingType("CARDIO");
+        trainingTypeDTO.setTrainingTypeId(1L);
+
+        TrainingTypeDTO trainingTypeDTO2 = new TrainingTypeDTO();
+        trainingTypeDTO2.setTrainingType("YOGA");
+        trainingTypeDTO2.setTrainingTypeId(2L);
+
+        List<TrainingTypeDTO> trainingTypeDTOS = new ArrayList<>(Arrays.asList(trainingTypeDTO, trainingTypeDTO2));
+
+        Mockito.when(trainingService.getAllTrainingTypes()).thenReturn(trainingTypeDTOS);
+
+        mockMvc.perform(get("/api/trainings/training-types")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].trainingTypeId").value(1))
+                .andExpect(jsonPath("$[0].trainingType").value("CARDIO"))
+                .andExpect(jsonPath("$[1].trainingTypeId").value(2))
+                .andExpect(jsonPath("$[1].trainingType").value("YOGA"));
     }
 
 
