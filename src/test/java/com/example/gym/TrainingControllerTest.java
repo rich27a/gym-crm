@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TrainingController.class)
 @Import(TrainingControllerTest.TestSecurityConfiguration.class)
+@ActiveProfiles("test")
 public class TrainingControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -88,7 +90,4 @@ public class TrainingControllerTest {
                 .andExpect(jsonPath("$[1].trainingTypeId").value(2))
                 .andExpect(jsonPath("$[1].trainingType").value("YOGA"));
     }
-
-
-
 }

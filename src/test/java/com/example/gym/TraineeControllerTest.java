@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TraineeController.class)
 @Import(TraineeControllerTest.TestSecurityConfiguration.class)
+@ActiveProfiles("test")
 public class TraineeControllerTest {
 
     @TestConfiguration

@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Base64;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TrainerController.class)
 @Import(TrainerControllerTest.TestSecurityConfiguration.class)
+@ActiveProfiles("test")
 public class TrainerControllerTest {
     @TestConfiguration
     static class TestSecurityConfiguration {
