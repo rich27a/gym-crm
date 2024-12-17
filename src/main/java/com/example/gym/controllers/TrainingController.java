@@ -27,7 +27,6 @@ public class TrainingController {
                 .map(created -> ResponseEntity.ok(created))
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false));
     }
-
     @GetMapping("/training-types")
     public ResponseEntity<List<TrainingTypeDTO>> getTrainingTypes(){
         List<TrainingTypeDTO> trainingTypeDTOS = trainingService.getAllTrainingTypes();

@@ -57,6 +57,6 @@ public class TrainingService {
                 .stream().map(trainingType -> trainingMapper.toTrainingTypeDTO(trainingType))
                 .toList();
     }
-    
+
 
 }
