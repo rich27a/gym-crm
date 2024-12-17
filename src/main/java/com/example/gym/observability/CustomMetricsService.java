@@ -19,4 +19,5 @@ public class CustomMetricsService {
     public void trackTimeTaken(Runnable task) {
         meterRegistry.timer("custom_metric.timer", "tag", "example").record(task);
     }
+
 }
