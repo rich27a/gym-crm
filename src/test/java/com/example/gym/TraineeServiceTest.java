@@ -34,36 +34,6 @@ public class TraineeServiceTest {
         trainee.setLastName("Doe");
         trainee.setActive(true);
     }
-
-//    @Test
-//    @DisplayName("testing creating a new trainee")
-//    public void testSaveTrainee(){
-//
-//        when(traineeRepository.save(any(Trainee.class))).thenReturn(trainee);
-//
-//        Trainee savedTrainee = traineeService.createTraineeProfile(trainee);
-//        assertNotNull(savedTrainee);
-//        assertEquals(savedTrainee.getUsername(), "John.Doe");
-//        assertNotEquals(savedTrainee.getPassword(), "1234");
-//    }
-
-//    @Test
-//    @DisplayName("Find a trainee by id")
-//    public void testFindTraineeById() {
-//        trainee.setFirstName("Juan");
-//        when(traineeRepository.findById(1L)).thenReturn(Optional.of(trainee));
-//        Optional<Trainee> foundTrainee = traineeService.selectTraineeProfile(1L);
-//        assertTrue(foundTrainee.isPresent());
-//        assertEquals("Juan", foundTrainee.get().getFirstName());
-//    }
-
-//    @Test
-//    @DisplayName("Return optional empty when trainee is not found")
-//    public void testFindTraineeByIdNotFound(){
-//        when(traineeRepository.findById(2L)).thenReturn(Optional.empty());
-//        Optional<Trainee> foundTrainee = traineeService.selectTraineeProfile(2L);
-//        assertTrue(foundTrainee.isEmpty());
-//    }
     @Test
     @DisplayName("Find trainee by username")
     public void testFindTraineeByUsername(){

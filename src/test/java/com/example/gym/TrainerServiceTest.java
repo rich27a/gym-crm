@@ -36,23 +36,12 @@ public class TrainerServiceTest {
         trainer.setActive(true);
     }
 
-//    @Test
-//    public void testCreateTrainer(){
-//        when(trainerRepository.save(any(Trainer.class))).thenReturn(trainer);
-//        Trainer savedTrainer = trainerService.createTrainerProfile(trainer);
-//        assertNotNull(savedTrainer);
-//        assertEquals(savedTrainer.getUsername(), "John.Doe");
-//        assertNotEquals(savedTrainer.getPassword(), "1234");
-//    }
-
     @Test
     public void testFindTrainerById() {
 
         when(trainerRepository.findById(1L)).thenReturn(Optional.of(trainer));
 
         Optional<Trainer> foundTrainer = trainerService.selectTrainerProfile(1L);
-
         assertTrue(foundTrainer.isPresent());
-//        assertEquals("Juan", foundTrainer.get().getFirstName());
     }
 }

@@ -9,11 +9,9 @@ import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.mappers.TrainingMapper;
 import com.example.gym.models.Specialization;
 import com.example.gym.models.Trainer;
-import com.example.gym.models.Training;
 import com.example.gym.models.TrainingType;
 import com.example.gym.repositories.TrainerRepository;
 import com.example.gym.repositories.UserRepository;
-import com.example.gym.utils.Profile;
 import jakarta.transaction.Transactional;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -25,7 +23,6 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TrainerService {
@@ -51,8 +48,8 @@ public class TrainerService {
     @Transactional
     public TrainerRegistrationResponseDTO createTrainerProfile(TrainerRegistrationRequestDTO trainer) {
         logger.info("starting createTraineeProfile...");
-        String username = Profile.generateUsername(trainer.getFirstName(),trainer.getLastName());
-        String password = Profile.generatePassword();
+        String username = generateUsername(trainer.getFirstName(),trainer.getLastName());
+        String password = generatePassword();
         if(userRepository.findByUsername(username).isPresent()){
             throw new UsernameAlreadyExistsException("Username is already taken.");
         };
