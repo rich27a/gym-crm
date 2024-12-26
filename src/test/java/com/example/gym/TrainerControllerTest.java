@@ -93,7 +93,7 @@ public class TrainerControllerTest {
         trainerRegistrationRequestDTO.setSpecialization("YOGA");
 
 
-        TrainerRegistrationResponseDTO trainerRegistrationResponseDTO = new TrainerRegistrationResponseDTO();
+        UserRegistrationResponseDTO trainerRegistrationResponseDTO = new UserRegistrationResponseDTO();
         trainerRegistrationResponseDTO.setUsername("John.Doe");
         trainerRegistrationResponseDTO.setPassword("password");
 

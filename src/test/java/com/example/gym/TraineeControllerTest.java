@@ -4,6 +4,7 @@ import com.example.gym.controllers.TraineeController;
 import com.example.gym.dtos.TraineeProfileResponse;
 import com.example.gym.dtos.TraineeRegistrationRequestDTO;
 import com.example.gym.dtos.TraineeRegistrationResponseDTO;
+import com.example.gym.dtos.UserRegistrationResponseDTO;
 import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.Trainee;
@@ -88,7 +89,7 @@ public class TraineeControllerTest {
         requestDTO.setFirstName("John");
         requestDTO.setLastName("Doe");
 
-        TraineeRegistrationResponseDTO responseDTO = new TraineeRegistrationResponseDTO();
+        UserRegistrationResponseDTO responseDTO = new UserRegistrationResponseDTO();
         responseDTO.setUsername("John.Doe");
         responseDTO.setPassword("password");
 
@@ -97,9 +98,6 @@ public class TraineeControllerTest {
         createdTrainee.setUsername("John.Doe");
 
         Mockito.when(traineeService.createTraineeProfile(Mockito.any(TraineeRegistrationRequestDTO.class)))
-                .thenReturn(createdTrainee);
-
-        Mockito.when(traineeMapper.toTraineeRegistrationResponse(Mockito.any(Trainee.class)))
                 .thenReturn(responseDTO);
 
         mockMvc.perform(post("/api/trainees")
