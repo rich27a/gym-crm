@@ -22,7 +22,11 @@ public interface TrainerMapper {
     TrainerProfileUpdateResponseDTO toUpdateResponse(Trainer trainer);
 
 
-    TrainerRegistrationResponseDTO toRegistrationResponse(Trainer trainer);
+
+    @Mapping(target = "password", ignore = true)
+    UserRegistrationResponseDTO toRegistrationResponse(Trainer trainer);
+
+
 
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "password", ignore = true)
