@@ -47,8 +47,8 @@ public class TrainerController {
     }
 
     @PostMapping
-    public ResponseEntity<TrainerRegistrationResponseDTO> createTrainer(@Valid @RequestBody TrainerRegistrationRequestDTO trainer){
-        TrainerRegistrationResponseDTO trainerRegistrationResponseDTO = trainerService.createTrainerProfile(trainer);
+    public ResponseEntity<UserRegistrationResponseDTO> createTrainer(@Valid @RequestBody TrainerRegistrationRequestDTO trainer){
+        UserRegistrationResponseDTO trainerRegistrationResponseDTO = trainerService.createTrainerProfile(trainer);
         return ResponseEntity.created(URI.create("/api/trainers/"+trainerRegistrationResponseDTO.getUsername())).body(trainerRegistrationResponseDTO);
     }
 

@@ -34,10 +34,10 @@ public class TraineeController {
     }
 
     @PostMapping
-    public ResponseEntity<TraineeRegistrationResponseDTO> save(@Valid @RequestBody TraineeRegistrationRequestDTO traineeRegistrationRequestDTO){
-        Trainee traineeCreated = traineeService.createTraineeProfile(traineeRegistrationRequestDTO);
+    public ResponseEntity<UserRegistrationResponseDTO> save(@Valid @RequestBody TraineeRegistrationRequestDTO traineeRegistrationRequestDTO){
+        UserRegistrationResponseDTO traineeCreated = traineeService.createTraineeProfile(traineeRegistrationRequestDTO);
         URI location = URI.create("/api/trainees/" + traineeCreated.getUsername());
-        return ResponseEntity.created(location).body(traineeMapper.toTraineeRegistrationResponse(traineeCreated));
+        return ResponseEntity.created(location).body(traineeCreated);
     }
 
     @PutMapping
