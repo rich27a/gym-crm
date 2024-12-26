@@ -3,6 +3,7 @@ package com.example.gym.services;
 import com.example.gym.dtos.TraineeRegistrationRequestDTO;
 import com.example.gym.dtos.TrainerInfoResponseDTO;
 import com.example.gym.dtos.TrainingInfoResponseDTO;
+import com.example.gym.dtos.UserRegistrationResponseDTO;
 import com.example.gym.exceptions.UsernameAlreadyExistsException;
 import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
@@ -55,7 +56,7 @@ public class TraineeService {
     private static final Logger logger = LoggerFactory.getLogger(TraineeService.class);
 
     @Transactional
-    public Trainee createTraineeProfile(TraineeRegistrationRequestDTO traineeRegistrationRequestDTO) {
+    public UserRegistrationResponseDTO createTraineeProfile(TraineeRegistrationRequestDTO traineeRegistrationRequestDTO) {
         logger.info("starting createTraineeProfile...");
         String username = generateUsername(traineeRegistrationRequestDTO.getFirstName(),traineeRegistrationRequestDTO.getLastName());
         String password = generatePassword();
@@ -66,11 +67,13 @@ public class TraineeService {
 
         Trainee trainee = traineeMapper.toTraineeFromRegistrationRequest(traineeRegistrationRequestDTO);
         trainee.setUsername(username);
-        trainee.setPassword(password);
+        trainee.setPassword(passwordEncoder.encode(password));
         trainee.setActive(true);
 
         logger.info("saving trainee with username {}", trainee.getUsername());
-        return traineeRepository.save(trainee);
+        UserRegistrationResponseDTO response = traineeMapper.toRegistrationResponse(traineeRepository.save(trainee));
+        response.setPassword(password);
+        return response;
     }
 
     @Transactional
