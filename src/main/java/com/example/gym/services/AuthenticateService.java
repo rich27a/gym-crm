@@ -3,6 +3,7 @@ package com.example.gym.services;
 import com.example.gym.dtos.LoginPasswordDto;
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,11 +14,13 @@ public class AuthenticateService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final LoginAttemptService loginAttemptService;
+    private final TokenBlackListService tokenBlackListService;
 
-    public AuthenticateService(UserRepository userRepository, PasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService) {
+    public AuthenticateService(UserRepository userRepository, PasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, TokenBlackListService tokenBlackListService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.loginAttemptService = loginAttemptService;
+        this.tokenBlackListService = tokenBlackListService;
     }
 
     public boolean authenticate(LoginPasswordDto loginPasswordDto){
@@ -35,6 +38,18 @@ public class AuthenticateService {
         }
 
         return isAuthenticated;
+    }
+
+    public boolean logout(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7);
+            tokenBlackListService.addToBlacklist(token);
+            return true;
+        }
+
+        return false;
     }
 
     @Transactional
