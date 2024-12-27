@@ -1,6 +1,7 @@
 package com.example.gym.advice;
 
 import com.example.gym.exceptions.UsernameAlreadyExistsException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,11 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler({BadCredentialsException.class})
     public ResponseEntity<String> handleBadCredentials(BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler({MalformedJwtException.class})
+    public ResponseEntity<String> handleInvalidJwtToken(MalformedJwtException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
