@@ -2,6 +2,7 @@ package com.example.gym.config;
 
 import com.example.gym.filters.JwtRequestFilter;
 import com.example.gym.services.CustomUserDetailsService;
+import com.example.gym.services.TokenBlackListService;
 import com.example.gym.utils.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +24,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
+    private final TokenBlackListService tokenBlackListService;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtUtil jwtUtil) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtUtil jwtUtil, TokenBlackListService tokenBlackListService) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtUtil = jwtUtil;
+        this.tokenBlackListService = tokenBlackListService;
     }
 
     @Bean
@@ -39,13 +42,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
                     http.requestMatchers( "/login").permitAll();
-                    http.requestMatchers( "api/auth/login").permitAll();
+                    http.requestMatchers( "api/auth/login", "api/auth/logout").permitAll();
                     http.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/trainees").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/trainers").permitAll();
                     http.anyRequest().authenticated();
                 })
-                .addFilterBefore(new JwtRequestFilter(jwtUtil, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtRequestFilter(jwtUtil, customUserDetailsService, tokenBlackListService), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
