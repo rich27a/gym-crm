@@ -1,8 +1,10 @@
 package com.example.gym.controllers;
 
 import com.example.gym.dtos.LoginPasswordDto;
+import com.example.gym.dtos.LoginResponseDTO;
 import com.example.gym.dtos.PasswordChangeDto;
 import com.example.gym.services.AuthenticateService;
+import com.example.gym.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,25 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class AuthenticateController {
     private final AuthenticateService authenticateService;
-    public AuthenticateController(AuthenticateService authenticateService) {
+    private final JwtUtil jwtUtil;
+
+    public AuthenticateController(AuthenticateService authenticateService, JwtUtil jwtUtil) {
         this.authenticateService = authenticateService;
+        this.jwtUtil = jwtUtil;
     }
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginPasswordDto loginPasswordDto){
-        return Optional.of(authenticateService.authenticate(loginPasswordDto))
-                .filter(auth -> auth)
-                .map(auth -> ResponseEntity.ok("Login successfully"))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password or username"));
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginPasswordDto loginPasswordDto){
+        Boolean isAuthenticated = authenticateService.authenticate(loginPasswordDto);
+        if (isAuthenticated) {
+            String token = jwtUtil.generateToken(loginPasswordDto.getUsername());
+            return ResponseEntity.ok(
+                    new LoginResponseDTO("Login successfully", token)
+            );
+        }
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new LoginResponseDTO("Invalid credentials", null));
     }
     @PutMapping("/password")
     public ResponseEntity<String> changePassword(@Valid @RequestBody PasswordChangeDto passwordChangeDto){
