@@ -1,6 +1,6 @@
 package com.example.gym.dtos;
 
-public class TrainerRegistrationResponseDTO {
+public class UserRegistrationResponseDTO {
     private String username;
     private String password;
 

@@ -1,9 +1,6 @@
 package com.example.gym.mappers;
 
-import com.example.gym.dtos.TraineeProfileResponse;
-import com.example.gym.dtos.TraineeProfileUpdateResponseDTO;
-import com.example.gym.dtos.TraineeRegistrationRequestDTO;
-import com.example.gym.dtos.TraineeRegistrationResponseDTO;
+import com.example.gym.dtos.*;
 import com.example.gym.models.Trainee;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.TrainingType;
@@ -27,6 +24,9 @@ public interface TraineeMapper {
 
     @Mapping(source = "trainingType", target = "specialization")
     TraineeProfileResponse.TrainerInfo toTrainerInfo(Trainer trainer);
+
+    @Mapping(target = "password", ignore = true)
+    UserRegistrationResponseDTO toRegistrationResponse(Trainee trainee);
 
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "password", ignore = true)

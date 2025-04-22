@@ -1,7 +1,7 @@
-INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainer', '123456789', 'John.Trainer', true);
-INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainer', '123456789', 'John.Trainer2', true);
-INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '123456789', 'John.Trainee', true);
-INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '123456789', 'John.Trainee2', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainer', '$2a$10$oklBkNnxJYkWNi0.NVn6hewu5nd/dWCrgxV2Buch4UdHrFhrIuRrO', 'John.Trainer', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainer', '$2a$10$oklBkNnxJYkWNi0.NVn6hewu5nd/dWCrgxV2Buch4UdHrFhrIuRrO', 'John.Trainer2', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '$2a$12$bfnym.aVpYGJ1U9x/seYPuZf5aniuUfUy4x4QaZTuKV.fAuDzdRRa', 'John.Trainee', true);
+INSERT INTO users(first_name, last_name, password, username, is_active) VALUES('John', 'Trainee', '$2a$12$bfnym.aVpYGJ1U9x/seYPuZf5aniuUfUy4x4QaZTuKV.fAuDzdRRa', 'John.Trainee2', true);
 
 INSERT INTO training_types( training_type) VALUES( 'CARDIO');
 INSERT INTO training_types( training_type) VALUES( 'YOGA');
