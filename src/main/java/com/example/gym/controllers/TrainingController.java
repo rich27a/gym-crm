@@ -34,4 +34,11 @@ public class TrainingController {
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(trainingTypeDTOS);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTraining(@PathVariable Long id) {
+
+        trainingService.deleteTraining(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
