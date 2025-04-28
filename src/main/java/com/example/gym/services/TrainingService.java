@@ -57,6 +57,19 @@ public class TrainingService {
     }
 
     @Transactional
+    public void deleteTraining(Long trainingId){
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new RuntimeException("Training not found"));
+
+        workloadNotificationService.notifyTrainingDeleted(training, getTransactionId());
+
+        trainingRepository.delete(training);
+
+        logger.info("[Transaction: {}] Successfully deleted training with ID: {}",
+                getTransactionId(), trainingId);
+    }
+
+    @Transactional
     public List<TrainingTypeDTO> getAllTrainingTypes(){
         logger.debug("Getting all training-types");
         return trainingTypeRepository.findAll()
