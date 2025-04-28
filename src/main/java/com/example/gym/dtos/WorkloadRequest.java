@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.example.gym.models.ActionType;
 
 import java.time.LocalDate;
 
@@ -20,7 +21,4 @@ public class WorkloadRequest {
     private int trainingDuration;
     private ActionType actionType;
 
-    public enum ActionType {
-        ADD, DELETE
-    }
 }
