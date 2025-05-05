@@ -7,8 +7,13 @@ import com.example.gym.models.ActionType;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.utils.JwtUtil;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.messaging.MessagingException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -25,6 +30,11 @@ public class WorkloadProducer {
         this.jwtUtil = jwtUtil;
     }
 
+
+    @Retryable(
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 1000, multiplier = 2)
+    )
     public void sendWorkloadNotification(Training training, ActionType actionType, String transactionId) {
         Trainer trainer = training.getTrainer();
 
@@ -38,12 +48,21 @@ public class WorkloadProducer {
         WorkloadMessage message = buildWorkloadMessage(training, trainer, actionType);
 
         final String finalTransactionId = transactionId;
-        jmsTemplate.convertAndSend(JmsConstants.WORKLOAD_QUEUE, message, jmsMessage -> {
-            jmsMessage.setStringProperty(JmsConstants.TRANSACTION_ID_PROPERTY, finalTransactionId);
-            return jmsMessage;
-        });
 
-        log.info("[Transaction: {}] Successfully sent workload message to queue", transactionId);
+        try {
+            log.info("Sending message to queue: {} with ID: {}",
+                    JmsConstants.WORKLOAD_QUEUE, finalTransactionId);
+            jmsTemplate.convertAndSend(JmsConstants.WORKLOAD_QUEUE, message, jmsMessage -> {
+                jmsMessage.setStringProperty(JmsConstants.TRANSACTION_ID_PROPERTY, finalTransactionId);
+                return jmsMessage;
+            });
+
+            log.info("Message sent successfully to {}", JmsConstants.WORKLOAD_QUEUE);
+        } catch (JmsException e) {
+            log.error("Sending to DLQ [Transaction: {}]", finalTransactionId);
+            sendToDeadLetterQueue(message, finalTransactionId, "Unexpected error: " + e.getMessage());
+            throw new MessagingException("Message moved to DLQ", e);
+        }
     }
 
     private WorkloadMessage buildWorkloadMessage(Training training, Trainer trainer, ActionType actionType) {
@@ -57,5 +76,20 @@ public class WorkloadProducer {
                 .actionType(actionType)
                 .authToken("Bearer " + jwtUtil.generateToken(trainer.getUsername()))
                 .build();
+    }
+
+    private void sendToDeadLetterQueue(WorkloadMessage message, String transactionId, String errorReason) {
+        try {
+            jmsTemplate.convertAndSend(JmsConstants.WORKLOAD_DLQ, message, jmsMessage -> {
+                jmsMessage.setStringProperty(JmsConstants.TRANSACTION_ID_PROPERTY, transactionId);
+                jmsMessage.setStringProperty("errorReason", errorReason);
+                jmsMessage.setStringProperty("originalTimestamp", String.valueOf(System.currentTimeMillis()));
+                return jmsMessage;
+            });
+            log.info("[Transaction: {}] Message sent to dead letter queue", transactionId);
+        } catch (Exception e) {
+            log.error("[Transaction: {}] Failed to send message to dead letter queue: {}",
+                    transactionId, e.getMessage(), e);
+        }
     }
 }
