@@ -1,4 +1,4 @@
-package com.example.gym.messages;
+package com.example.gym.messaging.jms.model;
 
 import com.example.gym.models.ActionType;
 import lombok.AllArgsConstructor;
