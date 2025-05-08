@@ -1,6 +1,7 @@
 package com.example.gym.messaging.jms.model;
 
 import com.example.gym.models.ActionType;
+import com.example.gym.models.WorkloadData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkloadMessage implements Serializable {
+public class WorkloadMessage implements Serializable{
     private static final long serialVersionUID = 1L;
 
     private String trainerUsername;
