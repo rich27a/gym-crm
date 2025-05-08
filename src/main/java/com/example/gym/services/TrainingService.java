@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.gym.utils.TransactionContext.getTransactionId;
+
 @Service
 public class TrainingService {
     private final TrainingRepository trainingRepository;
@@ -25,13 +27,16 @@ public class TrainingService {
     private final TraineeRepository traineeRepository;
     private final TrainingTypeRepository trainingTypeRepository;
     private final TrainingMapper trainingMapper;
+    private final WorkloadNotificationService workloadNotificationService;
 
-    public TrainingService(TrainingRepository trainingRepository, TrainerRepository trainerRepository, TraineeRepository traineeRepository, TrainingTypeRepository trainingTypeRepository, TrainingMapper trainingMapper) {
+
+    public TrainingService(TrainingRepository trainingRepository, TrainerRepository trainerRepository, TraineeRepository traineeRepository, TrainingTypeRepository trainingTypeRepository, TrainingMapper trainingMapper, WorkloadNotificationService workloadNotificationService) {
         this.trainingRepository = trainingRepository;
         this.trainerRepository = trainerRepository;
         this.traineeRepository = traineeRepository;
         this.trainingTypeRepository = trainingTypeRepository;
         this.trainingMapper = trainingMapper;
+        this.workloadNotificationService = workloadNotificationService;
     }
 
     private static Logger logger = LoggerFactory.getLogger(TrainerService.class);
@@ -46,8 +51,22 @@ public class TrainingService {
         training.setTrainee(trainee);
         training.setTrainer(trainer);
 
-        trainingRepository.save(training);
+        Training savedTraining = trainingRepository.save(training);
+        workloadNotificationService.notifyTrainingAdded(savedTraining, getTransactionId());
         return Optional.of(true);
+    }
+
+    @Transactional
+    public void deleteTraining(Long trainingId){
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new RuntimeException("Training not found"));
+
+        workloadNotificationService.notifyTrainingDeleted(training, getTransactionId());
+
+        trainingRepository.delete(training);
+
+        logger.info("[Transaction: {}] Successfully deleted training with ID: {}",
+                getTransactionId(), trainingId);
     }
 
     @Transactional

@@ -1,9 +1,6 @@
 package com.example.gym.services;
 
-import com.example.gym.dtos.TraineeRegistrationRequestDTO;
-import com.example.gym.dtos.TrainerInfoResponseDTO;
-import com.example.gym.dtos.TrainingInfoResponseDTO;
-import com.example.gym.dtos.UserRegistrationResponseDTO;
+import com.example.gym.dtos.*;
 import com.example.gym.exceptions.UsernameAlreadyExistsException;
 import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
