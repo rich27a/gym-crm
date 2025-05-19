@@ -2,6 +2,7 @@ package com.example.gym.services;
 
 import com.example.gym.client.WorkloadServiceClient;
 import com.example.gym.dtos.WorkloadRequest;
+import com.example.gym.messaging.jms.producer.WorkloadProducer;
 import com.example.gym.models.ActionType;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
@@ -20,10 +21,12 @@ public class WorkloadNotificationService {
 
     private final WorkloadServiceClient workloadClient;
     private final JwtUtil jwtUtil;
+    private final WorkloadProducer workloadProducer;
 
-    public WorkloadNotificationService(WorkloadServiceClient workloadClient, JwtUtil jwtUtil) {
+    public WorkloadNotificationService(WorkloadServiceClient workloadClient, JwtUtil jwtUtil, WorkloadProducer workloadProducer) {
         this.workloadClient = workloadClient;
         this.jwtUtil = jwtUtil;
+        this.workloadProducer = workloadProducer;
     }
 
     @CircuitBreaker(name = "workloadService", fallbackMethod = "workloadServiceFallback")
@@ -41,7 +44,7 @@ public class WorkloadNotificationService {
         WorkloadRequest request = buildWorkloadRequest(training, trainer, ActionType.ADD);
         String token = "Bearer " + jwtUtil.generateToken(trainer.getUsername());
 
-        workloadClient.processWorkload(request, token, transactionId);
+        workloadProducer.sendWorkloadNotification(training, ActionType.ADD, transactionId);
 
         log.info("[Transaction: {}] Successfully notified workload service", transactionId);
     }

@@ -142,8 +142,7 @@ public class TrainerService {
 
     @Transactional
     public List<Trainer> findAllByIds(List<Long> trainerIds){
-        logger.info("searching all trainers by Ids ");
-
+        logger.info("searching all trainers by Ids");
         return trainerRepository.findAllById(trainerIds);
     }
     @Transactional
