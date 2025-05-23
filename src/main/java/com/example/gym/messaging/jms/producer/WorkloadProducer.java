@@ -7,8 +7,8 @@ import com.example.gym.models.ActionType;
 import com.example.gym.models.Trainer;
 import com.example.gym.models.Training;
 import com.example.gym.utils.JwtUtil;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.MessagingException;
@@ -29,6 +29,12 @@ public class WorkloadProducer {
         this.jmsTemplate = jmsTemplate;
         this.jwtUtil = jwtUtil;
     }
+
+    @Value("${gym.activemq.workload.queue}")
+    private String workloadQueue;
+    @Value("${gym.activemq.workload.dlq}")
+    private String workloadDlq;
+
 
 
     @Retryable(
@@ -51,13 +57,13 @@ public class WorkloadProducer {
 
         try {
             log.info("Sending message to queue: {} with ID: {}",
-                    JmsConstants.WORKLOAD_QUEUE, finalTransactionId);
-            jmsTemplate.convertAndSend(JmsConstants.WORKLOAD_QUEUE, message, jmsMessage -> {
+                    workloadQueue, finalTransactionId);
+            jmsTemplate.convertAndSend(workloadQueue, message, jmsMessage -> {
                 jmsMessage.setStringProperty(JmsConstants.TRANSACTION_ID_PROPERTY, finalTransactionId);
                 return jmsMessage;
             });
 
-            log.info("Message sent successfully to {}", JmsConstants.WORKLOAD_QUEUE);
+            log.info("Message sent successfully to {}", workloadQueue);
         } catch (JmsException e) {
             log.error("Sending to DLQ [Transaction: {}]", finalTransactionId);
             sendToDeadLetterQueue(message, finalTransactionId, "Unexpected error: " + e.getMessage());
@@ -80,7 +86,7 @@ public class WorkloadProducer {
 
     private void sendToDeadLetterQueue(WorkloadMessage message, String transactionId, String errorReason) {
         try {
-            jmsTemplate.convertAndSend(JmsConstants.WORKLOAD_DLQ, message, jmsMessage -> {
+            jmsTemplate.convertAndSend(workloadDlq, message, jmsMessage -> {
                 jmsMessage.setStringProperty(JmsConstants.TRANSACTION_ID_PROPERTY, transactionId);
                 jmsMessage.setStringProperty("errorReason", errorReason);
                 jmsMessage.setStringProperty("originalTimestamp", String.valueOf(System.currentTimeMillis()));
