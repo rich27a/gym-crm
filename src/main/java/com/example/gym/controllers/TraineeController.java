@@ -5,6 +5,11 @@ import com.example.gym.mappers.TraineeMapper;
 import com.example.gym.mappers.TrainerMapper;
 import com.example.gym.models.*;
 import com.example.gym.services.TraineeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -18,7 +23,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.*;
 
-@Tag(name = "Trainees", description = "Controller for trainees")
+@Tag(name = "Trainees", description = "APIs for managing trainee profiles and operations")
 @RestController
 @RequestMapping("/api/trainees")
 public class TraineeController {
@@ -33,6 +38,13 @@ public class TraineeController {
         this.trainerMapper = trainerMapper;
     }
 
+    @Operation(summary = "Create new trainee", description = "Creates a new trainee profile in the system")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Trainee successfully created",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserRegistrationResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PostMapping
     public ResponseEntity<UserRegistrationResponseDTO> save(@Valid @RequestBody TraineeRegistrationRequestDTO traineeRegistrationRequestDTO){
         UserRegistrationResponseDTO traineeCreated = traineeService.createTraineeProfile(traineeRegistrationRequestDTO);
@@ -40,6 +52,14 @@ public class TraineeController {
         return ResponseEntity.created(location).body(traineeCreated);
     }
 
+    @Operation(summary = "Update trainee profile", description = "Updates an existing trainee's profile information")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Trainee profile successfully updated",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TraineeProfileUpdateResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Trainee not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PutMapping
     public ResponseEntity<TraineeProfileUpdateResponseDTO> update(@Valid @RequestBody Trainee trainee){
         return traineeService.updateTraineeProfile(trainee)
@@ -47,6 +67,13 @@ public class TraineeController {
                 .orElseThrow(()-> new EntityNotFoundException("trainee not found"));
     }
 
+    @Operation(summary = "Get trainee by username", description = "Retrieves a specific trainee's profile using their username")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved trainee profile",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TraineeProfileResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Trainee not found")
+    })
     @GetMapping("/{username}")
     public ResponseEntity<TraineeProfileResponse> getByUsername(@PathVariable String username){
         return traineeService.findTraineeByUsername(username)
@@ -54,11 +81,26 @@ public class TraineeController {
                 .orElseThrow(() -> new EntityNotFoundException("trainee not found"));
     }
 
+    @Operation(summary = "Delete trainee", description = "Deletes a trainee profile from the system")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Trainee successfully deleted",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "Trainee not found")
+    })
     @DeleteMapping("/{username}")
     public ResponseEntity<String> delete(@PathVariable(required = true) String username){
         return traineeService.deleteTraineeByUsername(username) ? ResponseEntity.ok("trainee deleted successfully") : ResponseEntity.status(HttpStatus.NOT_FOUND).body("trainee not found");
     }
 
+    @Operation(summary = "Get trainee's trainings", description = "Retrieves a list of trainings for a specific trainee with optional filtering")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved trainee's trainings",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TrainingInfoResponseDTO.class))),
+            @ApiResponse(responseCode = "204", description = "No trainings found"),
+            @ApiResponse(responseCode = "404", description = "Trainee not found")
+    })
     @GetMapping("/{username}/trainings")
     public ResponseEntity<List<TrainingInfoResponseDTO>> getTraineeTrainings(
             @PathVariable String username,
@@ -74,6 +116,14 @@ public class TraineeController {
                 .orElseThrow(() -> new ResourceNotFoundException("trainee not found"));
     }
 
+    @Operation(summary = "Update trainee's trainers", description = "Updates the list of trainers assigned to a trainee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Trainer list successfully updated",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TrainerInfoResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Trainee not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PutMapping("/{username}/trainers")
     public ResponseEntity<List<TrainerInfoResponseDTO>> updateTraineeTrainers(
             @PathVariable String username,
@@ -82,6 +132,12 @@ public class TraineeController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("trainee not found"));
     }
+    @Operation(summary = "Change trainee password", description = "Updates the password for a specific trainee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid password or old password incorrect"),
+            @ApiResponse(responseCode = "404", description = "Trainee not found")
+    })
     @PutMapping("/{username}/change-password")
     public Boolean updatePassword(@PathVariable String username,
                                   @RequestBody PasswordChangeDto passwordChangeDto
@@ -90,6 +146,14 @@ public class TraineeController {
     }
 
 
+    @Operation(summary = "Get unassigned trainers", description = "Retrieves a list of trainers not currently assigned to the trainee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved unassigned trainers",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TrainerInfoResponseDTO.class))),
+            @ApiResponse(responseCode = "204", description = "No unassigned trainers found"),
+            @ApiResponse(responseCode = "404", description = "Trainee not found")
+    })
     @GetMapping("/{username}/unassigned-trainers")
     public ResponseEntity<List<TrainerInfoResponseDTO>> getUnassignedTrainers(@PathVariable String username) {
         List<TrainerInfoResponseDTO> unassignedTrainers = traineeService.getUnassignedTrainers(username).stream()
@@ -99,6 +163,12 @@ public class TraineeController {
                 ?  ResponseEntity.noContent().build()
                 : ResponseEntity.ok(unassignedTrainers);
     }
+    @Operation(summary = "Update trainee status", description = "Activates or deactivates a trainee's account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Trainee status successfully updated"),
+            @ApiResponse(responseCode = "404", description = "Trainee not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PatchMapping("/{username}/status")
     public ResponseEntity<Void> updateTraineeStatus(@PathVariable String username, @RequestBody StatusUpdateDTO statusUpdateDTO){
         System.out.println("statusUpdateDTO = " + statusUpdateDTO.getActive());
