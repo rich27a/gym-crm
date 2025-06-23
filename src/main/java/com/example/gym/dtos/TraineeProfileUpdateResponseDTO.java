@@ -9,6 +9,10 @@ public class TraineeProfileUpdateResponseDTO extends TraineeProfileResponse{
         this.username = username;
     }
 
+    public TraineeProfileUpdateResponseDTO() {
+
+    }
+
     public String getUsername() {
         return username;
     }
